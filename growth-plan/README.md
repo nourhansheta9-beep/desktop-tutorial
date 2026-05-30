@@ -106,7 +106,9 @@ Stacked, these multiply rather than add — which is how you get from 1× to 2�
 | [`financial-model.md`](./financial-model.md) | The 2–3× math tailored to your $100k base + catalog: the revenue bridge, scenarios, H2 ramp |
 | [`help-mobility-growth-model.xlsx`](./help-mobility-growth-model.xlsx) | **Editable** driver model — change the yellow input cells, targets recompute |
 | [`funding-matrix.csv`](./funding-matrix.csv) · [`revenue-model.csv`](./revenue-model.csv) | Program quick-reference · revenue-bridge quick-reference |
-| [`help-mobility-partner-deck.pptx`](./help-mobility-partner-deck.pptx) | 12-slide partner pitch deck for hospitals / Hospital-at-Home / retirement & LTC |
+| [`help-mobility-partner-deck.pptx`](./help-mobility-partner-deck.pptx) | 12-slide partner pitch deck (hospital / Hospital-at-Home focus) |
+| [`help-mobility-retirement-chain-deck.pptx`](./help-mobility-retirement-chain-deck.pptx) | 12-slide deck re-emphasized for retirement & LTC operators (preferred-supplier, clinic days, PM contracts) |
+| [`help-mobility-discharge-leave-behind.pdf`](./help-mobility-discharge-leave-behind.pdf) | Print-ready one-page handout for discharge planners |
 | [`templates/`](./templates/) | Funding-desk Word templates: universal intake/triage form, insurance predetermination letter, HVMP application checklist |
 
 ---
