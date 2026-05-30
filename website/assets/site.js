@@ -102,44 +102,50 @@
     s.textContent = msg;
   }
 
+  function encodeForm(form) {
+    var fd = new FormData(form), pairs = [];
+    fd.forEach(function (v, k) { pairs.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)); });
+    return pairs.join('&');
+  }
+  function ajax(url, opts, form, btn, orig, s) {
+    fetch(url, opts).then(function (r) {
+      if (r.ok) { form.reset(); show(s, true, 'Thank you — we’ve received your message and will be in touch shortly.'); }
+      else { show(s, false, 'Sorry, something went wrong. Please call us or email ' + FALLBACK_EMAIL + '.'); }
+    }).catch(function () {
+      show(s, false, 'Network error. Please call us or email ' + FALLBACK_EMAIL + '.');
+    }).finally(function () { if (btn) { btn.disabled = false; btn.textContent = orig; } });
+  }
+
   document.querySelectorAll('form[data-hm-form]').forEach(function (form) {
     form.addEventListener('submit', function (ev) {
       var s = statusEl(form);
+      var btn = form.querySelector('button[type="submit"]');
+      var orig = btn ? btn.textContent : '';
+      var isNetlify = form.hasAttribute('data-netlify') || form.getAttribute('netlify') !== null;
 
-      // No endpoint configured -> graceful mailto fallback
-      if (!FORM_ENDPOINT) {
+      // 1) Explicit endpoint (Formspree/Basin/etc.)
+      if (FORM_ENDPOINT) {
         ev.preventDefault();
-        var fd = new FormData(form), lines = [];
-        fd.forEach(function (v, k) { if (v) lines.push(k + ': ' + v); });
-        var subject = encodeURIComponent('Website enquiry: ' + (form.getAttribute('data-hm-form') || 'contact'));
-        var bodyText = encodeURIComponent(lines.join('\n'));
-        window.location.href = 'mailto:' + FALLBACK_EMAIL + '?subject=' + subject + '&body=' + bodyText;
-        show(s, true, 'Opening your email app… If nothing happens, please call us or email ' + FALLBACK_EMAIL + '.');
+        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+        ajax(FORM_ENDPOINT, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } }, form, btn, orig, s);
         return;
       }
 
-      // AJAX submit to configured endpoint
-      ev.preventDefault();
-      var btn = form.querySelector('button[type="submit"]');
-      var orig = btn ? btn.textContent : '';
-      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      // 2) Netlify Forms (no endpoint needed) — POST url-encoded to the page path
+      if (isNetlify) {
+        ev.preventDefault();
+        if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+        ajax(location.pathname, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: encodeForm(form) }, form, btn, orig, s);
+        return;
+      }
 
-      fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      }).then(function (r) {
-        if (r.ok) {
-          form.reset();
-          show(s, true, 'Thank you — we’ve received your message and will be in touch shortly.');
-        } else {
-          show(s, false, 'Sorry, something went wrong. Please call us or email ' + FALLBACK_EMAIL + '.');
-        }
-      }).catch(function () {
-        show(s, false, 'Network error. Please call us or email ' + FALLBACK_EMAIL + '.');
-      }).finally(function () {
-        if (btn) { btn.disabled = false; btn.textContent = orig; }
-      });
+      // 3) Graceful mailto fallback
+      ev.preventDefault();
+      var lines = [];
+      new FormData(form).forEach(function (v, k) { if (v && k !== 'bot-field' && k !== 'form-name') lines.push(k + ': ' + v); });
+      var subject = encodeURIComponent('Website enquiry: ' + (form.getAttribute('data-hm-form') || 'contact'));
+      window.location.href = 'mailto:' + FALLBACK_EMAIL + '?subject=' + subject + '&body=' + encodeURIComponent(lines.join('\n'));
+      show(s, true, 'Opening your email app… If nothing happens, please call us or email ' + FALLBACK_EMAIL + '.');
     });
   });
 })();

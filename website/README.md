@@ -12,7 +12,16 @@ A complete, production-ready **multi-page** marketing site for Help Mobility —
 | `funding.html` | ADP / insurance / WSIB·VAC·NIHB / home-mods, a comparison table, the process, and a funding **FAQ** |
 | `rentals.html` | Rental fleet, terms, and the Hospital-at-Home program |
 | `funding-check.html` | **"Check my funding"** lead form — captures needs + funding so your desk can triage (mirrors your intake template) |
+| `service.html` | **Service & repairs** — repairs, battery/tune-ups, preventive-maintenance plans, and a service-request form |
+| `resources.html` | **Resources hub** — guides linking to the articles below |
+| `adp-funding-ontario-guide.html` · `choosing-the-right-mobility-aid.html` · `preparing-home-after-hospital.html` | SEO articles (plain-language guides) |
 | `brand-guide.html` | Brand & **photography** guide — colours, type, logo, voice, and a shot list for the team |
+
+## SEO & deploy files
+- **`sitemap.xml`** + **`robots.txt`** — search-engine ready (update the domain if it isn't `helpmobility.ca`).
+- **JSON-LD structured data** — `MedicalSupplyStore` on the home page, `Service` on the service page, and `Article` schema on each guide. Every page has a `<link rel="canonical">`.
+- **`netlify.toml`** — zero-config deploy with asset caching, security headers, and pretty URLs.
+- **`forms.html`** — hidden static form copies so Netlify reliably detects the three forms.
 
 ## Architecture (shared, DRY)
 - **`assets/styles.css`** — all styling; colours & fonts are CSS variables at the top (change once, applies everywhere).
@@ -49,9 +58,9 @@ Search the files for `[`:
 > Compliance note: funding copy uses safe wording ("up to 75%", "depends on eligibility"). Keep claims accurate — never promise coverage; eligibility is per-client and per-program.
 
 ## Deploy
-- **Netlify / Vercel / Cloudflare Pages:** drag in the `website/` folder, or connect the repo. Zero config. (Netlify Forms works out of the box if you add `netlify` to the `<form>` tags.)
-- **GitHub Pages:** push and enable Pages on the folder.
-- **Any host:** upload the folder. Done.
+- **Netlify (recommended):** connect the repo with base directory `website/`, or drag the folder into the dashboard. `netlify.toml` is preconfigured, and the three forms (`contact`, `funding-check`, `service`) submit to **Netlify Forms with no code** — just add an email notification under Forms → Notifications. The forms also work with a Formspree/Basin endpoint instead (set `FORM_ENDPOINT` in `site.js`).
+- **Vercel / Cloudflare Pages:** drag in the `website/` folder or connect the repo. Set `FORM_ENDPOINT` in `site.js` for forms.
+- **GitHub Pages / any host:** upload the folder. Done. (Forms fall back to email until an endpoint is set.)
 
 ## Regenerate preview screenshots
 ```bash
