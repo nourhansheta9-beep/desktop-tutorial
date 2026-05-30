@@ -100,6 +100,7 @@ Stacked, these multiply rather than add — which is how you get from 1× to 2�
 
 | File | What's in it |
 |------|--------------|
+| [`operating-plan/`](./operating-plan/) | **A-to-Z department-by-department operating plan** — every team's structure, each person's role, targets, income lines, comp, and cadence (9 playbooks) |
 | [`payer-funding-playbook.md`](./payer-funding-playbook.md) | Every funding program, coverage, how to onboard, ethical maximization, recurring-revenue engine |
 | [`org-and-team-design.md`](./org-and-team-design.md) | Your team mapped by name, the 3 missing roles, the 2 bottlenecks, target org + RACI + hiring order |
 | [`market-and-channel-strategy.md`](./market-and-channel-strategy.md) | Hospital-at-Home, Ontario Health atHome, retirement/LTC, referral engine, positioning vs. competitors |
