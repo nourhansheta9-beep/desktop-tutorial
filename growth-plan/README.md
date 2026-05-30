@@ -110,6 +110,8 @@ Stacked, these multiply rather than add — which is how you get from 1× to 2�
 | [`help-mobility-partner-deck.pptx`](./help-mobility-partner-deck.pptx) | 12-slide partner pitch deck (hospital / Hospital-at-Home focus) |
 | [`help-mobility-retirement-chain-deck.pptx`](./help-mobility-retirement-chain-deck.pptx) | 12-slide deck re-emphasized for retirement & LTC operators (preferred-supplier, clinic days, PM contracts) |
 | [`help-mobility-discharge-leave-behind.pdf`](./help-mobility-discharge-leave-behind.pdf) | Print-ready one-page handout for discharge planners |
+| [`help-mobility-org-chart-and-hiring-timeline.pdf`](./help-mobility-org-chart-and-hiring-timeline.pdf) | Visual org chart + 6-month hiring & budget timeline |
+| [`help-mobility-scorecards-and-commissions.xlsx`](./help-mobility-scorecards-and-commissions.xlsx) | Commission plans (all roles) + formula commission calculator + per-pod weekly scorecards |
 | [`templates/`](./templates/) | Funding-desk Word templates: universal intake/triage form, insurance predetermination letter, HVMP application checklist |
 
 ---
