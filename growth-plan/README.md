@@ -3,7 +3,13 @@
 **Goal:** double-to-triple sales volume in the second half of 2026.
 **Thesis:** in a funding-gated medical-equipment business, growth is gated by **payer access + approval throughput + referral relationships**, not by sales effort. You already have a capable delivery and selling team. This plan switches on **6+ new funded channels**, builds the **Funding & Intake desk** that converts demand into paid units, and points the institutional team at the **Hospital-at-Home / Ontario Health atHome** wave the province is funding right now.
 
-> ⚠️ **Assumptions** (tell me where I'm wrong and I'll re-tune): Ontario-based; you sell home medical / mobility equipment (and adjacent beds, bath-safety, possibly respiratory); you're already an ADP vendor in *some* categories; I don't yet have your baseline revenue, product mix, region, or which insurer/WSIB/VAC/NIHB registrations you hold. Those four inputs sharpen the model a lot — see "Sharpen this" at the end.
+**Company:** Help Mobility ([helpmobility.ca](https://helpmobility.ca)) — **ADP-authorized vendor**, **GTA** service area. Catalog: mobility (wheelchairs, scooters, rollators), **home accessibility (stairlifts, porchlifts, ramps, ceiling lifts, door openers)**, bathroom safety, daily-living/incontinence; sales + **rentals** + repairs.
+
+**Baseline:** ~**$100k/month** across direct sales + technical support + sales services + rental renewals (B2B and outside sales are additional / not yet measured).
+
+**The number:** Base case takes those streams to **~$200k/month (2×) by December**; stretch **~$300k/month (3×)**. See [`financial-model.md`](./financial-model.md) and the editable [`help-mobility-growth-model.xlsx`](./help-mobility-growth-model.xlsx).
+
+> 💡 **Tailored insight:** your **home-accessibility line is the most under-leveraged lever.** ADP doesn't fund stairlifts/ramps/ceiling lifts/bathroom mods — but **March of Dimes HVMP ($15k home) + Ontario Renovates + insurance** do, and those are high-ticket jobs. Make "help every accessibility client apply for HVMP" a standard step.
 
 ---
 
@@ -97,18 +103,22 @@ Stacked, these multiply rather than add — which is how you get from 1× to 2�
 | [`payer-funding-playbook.md`](./payer-funding-playbook.md) | Every funding program, coverage, how to onboard, ethical maximization, recurring-revenue engine |
 | [`org-and-team-design.md`](./org-and-team-design.md) | Your team mapped by name, the 3 missing roles, the 2 bottlenecks, target org + RACI + hiring order |
 | [`market-and-channel-strategy.md`](./market-and-channel-strategy.md) | Hospital-at-Home, Ontario Health atHome, retirement/LTC, referral engine, positioning vs. competitors |
-| [`funding-matrix.csv`](./funding-matrix.csv) | One-row-per-program quick reference (import into your CRM/sheet) |
+| [`financial-model.md`](./financial-model.md) | The 2–3× math tailored to your $100k base + catalog: the revenue bridge, scenarios, H2 ramp |
+| [`help-mobility-growth-model.xlsx`](./help-mobility-growth-model.xlsx) | **Editable** driver model — change the yellow input cells, targets recompute |
+| [`funding-matrix.csv`](./funding-matrix.csv) · [`revenue-model.csv`](./revenue-model.csv) | Program quick-reference · revenue-bridge quick-reference |
 
 ---
 
-## Sharpen this — 4 inputs and I'll go deeper
+## Sharpen this — what's confirmed and what's still open
 
-1. **Baseline:** current monthly revenue + unit mix → I'll build a numeric 2–3× target model & dashboard.
-2. **Product lines:** what you actually sell/service (mobility only? beds? respiratory/oxygen? bath safety? mods?).
-3. **Region/coverage:** which areas/hospitals/retirement chains you can realistically serve.
-4. **Current registrations:** which ADP categories + which of insurance/WSIB/VAC/NIHB you already hold.
+✅ Baseline (~$100k/mo, 4 streams) · ✅ ADP-authorized · ✅ Product lines (helpmobility.ca) · ✅ Region (GTA) → numeric model built.
 
-Send those and I can also produce: a **numeric financial model (xlsx)**, a **hospital/retirement-chain pitch deck (pptx)**, and **predetermination/intake templates (docx)** — I have the document skills installed to generate all three.
+Still open (send these and I'll lock the model to reality):
+1. **Stream split** — how the $100k divides across direct sales / tech support / sales services / rental renewals (and is it combined or per-stream?).
+2. **B2B + outside-sales** monthly revenue → completes the whole-company baseline.
+3. **Registrations you already hold** — which ADP categories, and any of insurance/WSIB/VAC/NIHB already set up.
+
+Then I can produce next: a **hospital/retirement-chain pitch deck (pptx)**, **intake + predetermination + HVMP-application templates (docx)**, and a **month-by-month plan per pod** — the document skills are installed.
 
 ---
 
