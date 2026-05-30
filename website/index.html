@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>document.documentElement.className += " js";</script>
 <title>Help Mobility — Mobility & Home Accessibility, Funding Handled | Greater Toronto Area</title>
 <meta name="description" content="Help Mobility is an ADP-authorized provider of wheelchairs, scooters, stairlifts, ramps and bathroom safety equipment across the Greater Toronto Area. We handle the funding paperwork — ADP, insurance, WSIB, Veterans Affairs and more — and deliver fast." />
 <meta name="theme-color" content="#1C5A4A" />
@@ -249,9 +250,9 @@ footer.site .fdesc{max-width:34ch; font-size:.98rem; line-height:1.6}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.14); margin-top:2.4rem; padding-top:1.4rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-size:.88rem; opacity:.8}
 
 /* reveal animation */
-.reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1; transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
 
 /* high-contrast mode */
 body.hc{--paper:#fff;--paper-2:#fff;--surface:#fff;--ink:#000;--ink-soft:#1a1a1a;
