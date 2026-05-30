@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Help Mobility — Mobility & Home Accessibility, Funding Handled | Greater Toronto Area</title>
+<meta name="description" content="Help Mobility is an ADP-authorized provider of wheelchairs, scooters, stairlifts, ramps and bathroom safety equipment across the Greater Toronto Area. We handle the funding paperwork — ADP, insurance, WSIB, Veterans Affairs and more — and deliver fast." />
+<meta name="theme-color" content="#1C5A4A" />
+<meta property="og:title" content="Help Mobility — Mobility & Home Accessibility, Funding Handled" />
+<meta property="og:description" content="ADP-authorized mobility & home-accessibility equipment across the GTA. We handle the funding — ADP, insurance, WSIB, Veterans Affairs — and deliver in 24–48 hours." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%231C5A4A'/%3E%3Ccircle cx='24' cy='24' r='13' fill='none' stroke='%23F4EFE3' stroke-width='2.4'/%3E%3Ccircle cx='24' cy='24' r='3.4' fill='%23F4EFE3'/%3E%3Cpath d='M24 11v5M24 32v5M11 24h5M32 24h5M30 18l-8 8' stroke='%23E7B45A' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#F4EFE3; --paper-2:#EFE7D6; --surface:#FFFDF8; --ink:#1E2B24; --ink-soft:#42524A;
+  --pine:#1C5A4A; --pine-deep:#123A30; --pine-tint:#E4EDE7;
+  --ochre:#C2741A; --ochre-soft:#E7B45A; --ochre-tint:#F6E6CB;
+  --line:rgba(28,90,74,.16); --line-strong:rgba(28,90,74,.32);
+  --shadow-sm:0 1px 2px rgba(18,58,48,.06),0 2px 8px rgba(18,58,48,.05);
+  --shadow:0 6px 18px rgba(18,58,48,.10),0 22px 48px rgba(18,58,48,.10);
+  --shadow-lg:0 12px 30px rgba(18,58,48,.14),0 40px 80px rgba(18,58,48,.14);
+  --r:18px; --r-sm:12px; --r-pill:999px; --maxw:1180px;
+  --serif:"Fraunces",Georgia,serif; --sans:"Hanken Grotesk",system-ui,sans-serif;
+  --step:1; /* accessibility text scale */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth; font-size:calc(100% * var(--step));}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--sans); color:var(--ink); background:var(--paper);
+  font-size:1.125rem; line-height:1.65; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* warm grain overlay */
+body::before{
+  content:""; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.45;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+.wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(20px,5vw,40px); position:relative; z-index:2}
+h1,h2,h3,h4{font-family:var(--serif); font-weight:600; line-height:1.06; letter-spacing:-.015em; color:var(--pine-deep)}
+h2{font-size:clamp(2rem,4.4vw,3.25rem); font-weight:600}
+h3{font-size:clamp(1.3rem,2.2vw,1.6rem)}
+p{max-width:64ch}
+a{color:var(--pine); text-underline-offset:3px}
+::selection{background:var(--ochre-soft); color:var(--pine-deep)}
+
+/* skip link */
+.skip{position:absolute; left:-999px; top:8px; z-index:200; background:var(--pine); color:#fff; padding:12px 18px; border-radius:var(--r-sm); font-weight:600}
+.skip:focus{left:12px}
+
+/* focus visibility */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:3px solid var(--ochre); outline-offset:3px; border-radius:6px
+}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex; align-items:center; gap:.55em; font-family:var(--sans); font-weight:700;
+  font-size:1.02rem; padding:.95em 1.5em; border-radius:var(--r-pill); border:2px solid transparent;
+  cursor:pointer; text-decoration:none; min-height:52px; transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--pine); color:#fff; box-shadow:var(--shadow-sm)}
+.btn-primary:hover{background:var(--pine-deep); box-shadow:var(--shadow)}
+.btn-accent{background:var(--ochre); color:#fff}
+.btn-accent:hover{background:#a9620f}
+.btn-ghost{background:transparent; color:var(--pine-deep); border-color:var(--line-strong)}
+.btn-ghost:hover{background:var(--pine-tint); border-color:var(--pine)}
+.btn svg{width:1.15em; height:1.15em}
+
+/* ---------- header ---------- */
+header.site{position:sticky; top:0; z-index:100; background:rgba(244,239,227,.86);
+  backdrop-filter:saturate(140%) blur(12px); border-bottom:1px solid var(--line)}
+.nav{display:flex; align-items:center; gap:1.5rem; min-height:74px}
+.brand{display:flex; align-items:center; gap:.7rem; text-decoration:none; color:var(--pine-deep); font-family:var(--serif);
+  font-weight:600; font-size:1.4rem; letter-spacing:-.02em; margin-right:auto}
+.brand .logo{width:42px; height:42px; flex:none}
+.navlinks{display:flex; gap:1.4rem; align-items:center}
+.navlinks a{color:var(--ink-soft); text-decoration:none; font-weight:600; font-size:1rem; padding:.4em 0; position:relative}
+.navlinks a:hover{color:var(--pine-deep)}
+.navlinks a::after{content:""; position:absolute; left:0; right:100%; bottom:-2px; height:2px; background:var(--ochre); transition:right .25s ease}
+.navlinks a:hover::after,.navlinks a.active::after{right:0}
+.nav-cta{display:flex; align-items:center; gap:.75rem}
+.phone-link{display:inline-flex; align-items:center; gap:.5rem; font-weight:700; color:var(--pine-deep); text-decoration:none; white-space:nowrap}
+.phone-link svg{width:1.1em;height:1.1em}
+.menu-btn{display:none; background:var(--surface); border:1px solid var(--line-strong); border-radius:12px; width:50px;height:50px; cursor:pointer; align-items:center; justify-content:center}
+.menu-btn svg{width:24px;height:24px;color:var(--pine-deep)}
+
+/* ---------- accessibility bar ---------- */
+.a11y{background:var(--pine-deep); color:#EaF3ee; font-size:.92rem}
+.a11y .wrap{display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; padding-block:7px}
+.a11y .label{display:inline-flex; align-items:center; gap:.45rem; font-weight:600; opacity:.92}
+.a11y .label svg{width:1.05em;height:1.05em}
+.a11y .grp{display:flex; gap:.35rem; margin-left:.15rem}
+.a11y button{background:rgba(255,255,255,.10); color:#fff; border:1px solid rgba(255,255,255,.22);
+  border-radius:8px; padding:.25em .7em; font-family:var(--sans); font-weight:700; cursor:pointer; min-height:34px}
+.a11y button:hover{background:rgba(255,255,255,.2)}
+.a11y button[aria-pressed="true"]{background:var(--ochre); border-color:var(--ochre)}
+.a11y .sep{width:1px; height:20px; background:rgba(255,255,255,.22); margin-inline:.4rem}
+.a11y .spacer{margin-left:auto}
+
+/* ---------- hero ---------- */
+.hero{position:relative; padding-top:clamp(40px,7vw,84px); padding-bottom:clamp(48px,8vw,96px); overflow:hidden}
+.hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,5vw,64px); align-items:center}
+.eyebrow{display:inline-flex; align-items:center; gap:.55rem; background:var(--pine-tint); color:var(--pine-deep);
+  font-weight:700; font-size:.92rem; letter-spacing:.02em; padding:.5em 1em; border-radius:var(--r-pill); border:1px solid var(--line)}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%; background:var(--ochre)}
+.hero h1{font-size:clamp(2.7rem,6.2vw,4.6rem); margin:.5em 0 .35em; font-weight:600}
+.hero h1 em{font-style:italic; color:var(--pine); font-weight:500}
+.hero .lead{font-size:clamp(1.15rem,2vw,1.4rem); color:var(--ink-soft); max-width:38ch}
+.hero-actions{display:flex; gap:.9rem; flex-wrap:wrap; margin-top:1.8rem}
+.hero-note{margin-top:1.2rem; font-size:1rem; color:var(--ink-soft); display:flex; align-items:center; gap:.5rem}
+.hero-note svg{width:1.2em;height:1.2em;color:var(--pine)}
+.hero-decor{position:absolute; right:-12%; top:-18%; width:60vw; max-width:780px; aspect-ratio:1; z-index:0;
+  background:radial-gradient(closest-side, rgba(231,180,90,.20), transparent 70%); filter:blur(8px)}
+
+/* hero card */
+.hero-card{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:calc(var(--r) + 8px);
+  box-shadow:var(--shadow-lg); padding:clamp(20px,2.6vw,30px); rotate:1.4deg}
+.hero-card .photo{aspect-ratio:4/3; border-radius:var(--r); background:
+  linear-gradient(135deg,var(--pine) 0%, var(--pine-deep) 100%);
+  position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:18px}
+.hero-card .photo .ph-label{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.7); font-size:.85rem; font-weight:600; letter-spacing:.04em; text-align:center; padding:20px}
+.hero-card .photo svg.illo{position:absolute; right:-10px; bottom:-10px; width:62%; height:auto; opacity:.95}
+.hero-card .badge{position:absolute; left:-18px; top:-18px; background:var(--ochre); color:#fff; rotate:-6deg;
+  border-radius:16px; padding:.7em 1em; font-weight:800; line-height:1.1; box-shadow:var(--shadow); font-size:1.05rem}
+.hero-card .badge small{display:block; font-weight:600; opacity:.92; font-size:.78rem}
+.hero-card .card-foot{display:flex; align-items:center; gap:.8rem; margin-top:16px}
+.hero-card .card-foot .ico{width:44px;height:44px;border-radius:12px;background:var(--ochre-tint); color:var(--ochre);
+  display:flex;align-items:center;justify-content:center;flex:none}
+.hero-card .card-foot .ico svg{width:24px;height:24px}
+.hero-card .card-foot b{display:block;color:var(--pine-deep);font-size:1.05rem}
+.hero-card .card-foot span{color:var(--ink-soft);font-size:.95rem}
+
+/* ---------- trust band ---------- */
+.trust{background:var(--pine-deep); color:#EAF3EE; padding-block:clamp(22px,3vw,30px)}
+.trust .row{display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; text-align:center}
+.trust .item .k{font-family:var(--serif); font-size:clamp(1.6rem,2.6vw,2.2rem); color:#fff; font-weight:600; line-height:1}
+.trust .item .v{font-size:.98rem; opacity:.85; margin-top:.35rem}
+.trust .item .k.word{font-size:clamp(1.15rem,1.8vw,1.4rem)}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(56px,8vw,104px); position:relative}
+.sec-head{max-width:62ch; margin-bottom:clamp(28px,4vw,52px)}
+.sec-head .kicker{display:inline-flex;align-items:center;gap:.5rem; color:var(--ochre); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; font-size:.82rem; margin-bottom:.7rem}
+.sec-head .kicker::before{content:"";width:26px;height:2px;background:var(--ochre)}
+.sec-head p{color:var(--ink-soft); font-size:1.15rem; margin-top:.8rem}
+.tint{background:linear-gradient(180deg,var(--paper) 0%, var(--paper-2) 100%)}
+
+/* funding cards */
+.fund-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem}
+.fcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:24px;
+  box-shadow:var(--shadow-sm); transition:transform .2s ease, box-shadow .2s ease; position:relative; overflow:hidden}
+.fcard:hover{transform:translateY(-4px); box-shadow:var(--shadow)}
+.fcard .ic{width:50px;height:50px;border-radius:14px;background:var(--pine-tint);color:var(--pine);
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.fcard .ic svg{width:27px;height:27px}
+.fcard h3{font-size:1.22rem;margin-bottom:.3rem}
+.fcard .amt{color:var(--ochre);font-weight:800;font-size:.95rem;margin-bottom:.5rem}
+.fcard p{font-size:.98rem;color:var(--ink-soft)}
+
+/* products */
+.prod-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1.3rem}
+.pcard{position:relative; border-radius:calc(var(--r) + 4px); overflow:hidden; border:1px solid var(--line);
+  background:var(--surface); box-shadow:var(--shadow-sm); display:flex; flex-direction:column; min-height:260px}
+.pcard .pc-top{flex:1; background:var(--pine-tint); position:relative; display:flex; align-items:center; justify-content:center; padding:24px}
+.pcard:nth-child(2) .pc-top{background:var(--ochre-tint)}
+.pcard:nth-child(3) .pc-top{background:#E6EBE2}
+.pcard:nth-child(4) .pc-top{background:#EFE7D6}
+.pcard .pc-top svg{width:84px;height:84px;color:var(--pine)}
+.pcard:nth-child(2) .pc-top svg{color:var(--ochre)}
+.pcard .pc-body{padding:22px 24px 26px}
+.pcard h3{margin-bottom:.4rem}
+.pcard ul{list-style:none; color:var(--ink-soft); font-size:1rem; columns:2; column-gap:18px}
+.pcard li{padding:.18em 0 .18em 1.1em; position:relative; break-inside:avoid}
+.pcard li::before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--ochre)}
+.pcard .tag{position:absolute; top:14px; right:14px; background:var(--surface); color:var(--pine-deep); font-weight:700;
+  font-size:.78rem; padding:.35em .8em; border-radius:var(--r-pill); border:1px solid var(--line)}
+
+/* steps */
+.steps{display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; counter-reset:step}
+.step{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:26px 22px; position:relative}
+.step .num{counter-increment:step; font-family:var(--serif); font-size:2.4rem; color:var(--ochre-soft); font-weight:600; line-height:1}
+.step .num::before{content:"0" counter(step)}
+.step h3{font-size:1.18rem; margin:.5rem 0 .35rem}
+.step p{font-size:.98rem; color:var(--ink-soft)}
+.step::after{content:"→"; position:absolute; right:-13px; top:50%; transform:translateY(-50%); color:var(--line-strong); font-size:1.4rem; z-index:3}
+.steps .step:last-child::after{display:none}
+
+/* split (rentals / partners) */
+.split{display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,5vw,64px); align-items:center}
+.split .panel{background:var(--surface); border:1px solid var(--line); border-radius:calc(var(--r)+6px); box-shadow:var(--shadow);
+  padding:clamp(26px,3.4vw,40px)}
+.split .panel.dark{background:linear-gradient(150deg,var(--pine) 0%,var(--pine-deep) 100%); color:#EAF3EE; border:none}
+.split .panel.dark h2,.split .panel.dark h3{color:#fff}
+.split .panel.dark p{color:rgba(234,243,238,.86)}
+.feat{list-style:none; margin-top:1.2rem; display:grid; gap:.85rem}
+.feat li{display:flex; gap:.8rem; align-items:flex-start; font-size:1.04rem}
+.feat li svg{width:1.4em;height:1.4em;flex:none;color:var(--ochre); margin-top:.12em}
+.split .panel.dark .feat li svg{color:var(--ochre-soft)}
+.partner-list{display:grid; gap:1rem}
+.partner-list .pl{display:flex; gap:1rem; align-items:flex-start; padding:18px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r)}
+.partner-list .pl .ic{width:46px;height:46px;border-radius:12px;background:var(--pine-tint);color:var(--pine);display:flex;align-items:center;justify-content:center;flex:none}
+.partner-list .pl .ic svg{width:25px;height:25px}
+.partner-list .pl b{color:var(--pine-deep)}
+.partner-list .pl p{font-size:.98rem;color:var(--ink-soft);margin-top:.15rem}
+
+/* testimonials */
+.quotes{display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem}
+.quote{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:28px; box-shadow:var(--shadow-sm); position:relative}
+.quote .mark{font-family:var(--serif); font-size:3.4rem; color:var(--ochre-soft); line-height:.6; height:.5em}
+.quote p{font-size:1.06rem; color:var(--ink); font-style:italic}
+.quote .who{margin-top:1rem; font-weight:700; color:var(--pine-deep); font-style:normal}
+.quote .who span{display:block; font-weight:500; color:var(--ink-soft); font-size:.92rem}
+.ph-flag{background:var(--ochre-tint); color:#7a4a08; border:1px dashed var(--ochre); border-radius:var(--r-sm);
+  padding:.7em 1em; font-size:.92rem; font-weight:600; margin-top:1.2rem; display:inline-block}
+
+/* CTA + contact */
+.contact{background:linear-gradient(150deg,var(--pine) 0%, var(--pine-deep) 100%); color:#EAF3EE; border-radius:calc(var(--r)+10px); overflow:hidden}
+.contact .inner{display:grid; grid-template-columns:1fr 1fr; gap:clamp(28px,5vw,56px); padding:clamp(30px,5vw,60px)}
+.contact h2{color:#fff}
+.contact .lead{color:rgba(234,243,238,.88); font-size:1.15rem; margin-top:.8rem}
+.contact-info{display:grid; gap:1rem; margin-top:1.6rem}
+.contact-info a, .contact-info div{display:flex; gap:.8rem; align-items:center; color:#fff; text-decoration:none; font-size:1.08rem; font-weight:600}
+.contact-info svg{width:1.4em;height:1.4em;color:var(--ochre-soft);flex:none}
+.contact-info span{font-weight:500; color:rgba(234,243,238,.8); font-size:.95rem; display:block}
+form{display:grid; gap:.9rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16); border-radius:var(--r); padding:clamp(20px,2.5vw,28px)}
+form .field{display:grid; gap:.35rem}
+form label{font-weight:600; color:#EAF3EE; font-size:.95rem}
+form input, form select, form textarea{font-family:var(--sans); font-size:1.02rem; padding:.8em .9em; border-radius:12px;
+  border:1.5px solid rgba(255,255,255,.22); background:rgba(255,255,255,.95); color:var(--ink); min-height:50px}
+form textarea{min-height:96px; resize:vertical}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:.9rem}
+form .btn{justify-content:center; margin-top:.3rem}
+.formnote{font-size:.85rem;color:rgba(234,243,238,.7)}
+
+/* footer */
+footer.site{background:var(--pine-deep); color:rgba(234,243,238,.8); padding-block:clamp(40px,5vw,60px) 28px; margin-top:clamp(40px,6vw,80px)}
+.foot-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:2rem}
+footer.site .brand{color:#fff; margin-bottom:1rem}
+footer.site h4{color:#fff; font-family:var(--sans); font-size:.95rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1rem; font-weight:700}
+footer.site a{color:rgba(234,243,238,.8); text-decoration:none; display:block; padding:.3em 0}
+footer.site a:hover{color:var(--ochre-soft)}
+footer.site .fdesc{max-width:34ch; font-size:.98rem; line-height:1.6}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.14); margin-top:2.4rem; padding-top:1.4rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; font-size:.88rem; opacity:.8}
+
+/* reveal animation */
+.reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* high-contrast mode */
+body.hc{--paper:#fff;--paper-2:#fff;--surface:#fff;--ink:#000;--ink-soft:#1a1a1a;
+  --pine:#0a4636;--pine-deep:#063226;--pine-tint:#e7f0ec;--ochre:#8a4b00;--ochre-soft:#8a4b00;
+  --line:#063226;--line-strong:#063226}
+body.hc::before{display:none}
+body.hc .navlinks a,body.hc .phone-link{color:#000}
+body.hc .hero-card .photo .ph-label,body.hc .pcard .tag{color:#063226}
+body.hc .trust,body.hc .split .panel.dark,body.hc .contact,body.hc footer.site{color:#fff}
+body.hc .btn-primary{background:#063226}
+body.hc .fcard,body.hc .pcard,body.hc .step,body.hc .quote,body.hc .partner-list .pl{border-width:2px}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr; gap:40px}
+  .hero-card{rotate:0deg; max-width:520px}
+  .fund-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)} .step::after{display:none}
+  .split,.contact .inner{grid-template-columns:1fr}
+  .quotes{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .trust .row{grid-template-columns:repeat(2,1fr); gap:1.6rem}
+}
+@media (max-width:680px){
+  body{font-size:1.06rem}
+  .navlinks{display:none; position:absolute; top:100%; left:0; right:0; flex-direction:column; background:var(--paper);
+    border-bottom:1px solid var(--line); padding:1rem 1.2rem 1.4rem; gap:.2rem; box-shadow:var(--shadow)}
+  .navlinks.open{display:flex}
+  .navlinks a{padding:.7em 0; border-bottom:1px solid var(--line); width:100%}
+  .navlinks a::after{display:none}
+  .menu-btn{display:flex}
+  .nav-cta .phone-text{display:none}
+  .prod-grid{grid-template-columns:1fr}
+  .pcard ul{columns:1}
+  .fund-grid{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .a11y .label span.full{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<!-- accessibility toolbar -->
+<div class="a11y" role="region" aria-label="Accessibility tools">
+  <div class="wrap">
+    <span class="label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M9 11h6"/></svg>
+      <span class="full">Make this site easier to use:</span>
+    </span>
+    <span class="label" style="opacity:.8">Text size</span>
+    <div class="grp" role="group" aria-label="Text size">
+      <button type="button" data-text="1" aria-pressed="true">A</button>
+      <button type="button" data-text="1.15" aria-pressed="false" style="font-size:1.05rem">A+</button>
+      <button type="button" data-text="1.32" aria-pressed="false" style="font-size:1.15rem">A++</button>
+    </div>
+    <span class="sep" aria-hidden="true"></span>
+    <button type="button" id="hcToggle" aria-pressed="false">◑ High contrast</button>
+    <span class="spacer"></span>
+    <a href="#contact" style="color:#EaF3ee;text-decoration:none;font-weight:600">Need help choosing? →</a>
+  </div>
+</div>
+
+<!-- header -->
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Help Mobility home">
+      <svg class="logo" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" fill="#1C5A4A"/>
+        <circle cx="24" cy="24" r="13" fill="none" stroke="#F4EFE3" stroke-width="2.4"/>
+        <circle cx="24" cy="24" r="3.4" fill="#F4EFE3"/>
+        <path d="M24 11v5M24 32v5M11 24h5M32 24h5" stroke="#E7B45A" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M30 18l-8 8" stroke="#E7B45A" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      Help&nbsp;Mobility
+    </a>
+    <nav class="navlinks" id="navlinks" aria-label="Primary">
+      <a href="#funding">Funding</a>
+      <a href="#products">Products</a>
+      <a href="#how">How it works</a>
+      <a href="#rentals">Rentals</a>
+      <a href="#partners">Healthcare partners</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="phone-link" href="tel:+10000000000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg><span class="phone-text">[ Phone ]</span></a>
+      <a class="btn btn-accent" href="#contact">Get funding help</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- hero -->
+<section class="hero" aria-labelledby="hero-h">
+  <div class="hero-decor" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="dot"></span> ADP-Authorized Vendor · Greater Toronto Area</span>
+      <h1 id="hero-h">Mobility &amp; independence at home — <em>with the funding handled for you.</em></h1>
+      <p class="lead">Wheelchairs, scooters, stairlifts, ramps and bathroom safety — delivered and set up fast. We navigate ADP, insurance and government funding so you pay less and worry less.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#products">Explore products
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="#funding">See how funding works</a>
+      </div>
+      <p class="hero-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Fast 24–48&nbsp;hour delivery &amp; in-home setup across the GTA</p>
+    </div>
+    <div class="hero-card">
+      <span class="badge">Up to 100%<small>covered by funding*</small></span>
+      <div class="photo">
+        <div class="ph-label">[ Add a warm photo here — a client at home with their equipment ]</div>
+        <svg class="illo" viewBox="0 0 200 160" fill="none" aria-hidden="true">
+          <circle cx="150" cy="120" r="26" stroke="#E7B45A" stroke-width="5"/>
+          <circle cx="86" cy="120" r="26" stroke="#E7B45A" stroke-width="5"/>
+          <path d="M86 120 L96 70 L140 70 L150 120" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M96 70 q-4 -22 -22 -22" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="118" cy="48" r="12" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="card-foot">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div><b>We do the paperwork</b><span>ADP · insurance · WSIB · Veterans Affairs · NIHB</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- trust band -->
+<div class="trust">
+  <div class="wrap row">
+    <div class="item"><div class="k">ADP</div><div class="v">Authorized vendor</div></div>
+    <div class="item"><div class="k">24–48h</div><div class="v">Delivery &amp; setup</div></div>
+    <div class="item"><div class="k word">Funding-first</div><div class="v">We handle the claims</div></div>
+    <div class="item"><div class="k word">GTA-wide</div><div class="v">Serving Greater Toronto</div></div>
+  </div>
+</div>
+
+<!-- funding -->
+<section id="funding" class="tint" aria-labelledby="fund-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Why families choose us</span>
+      <h2 id="fund-h">Funding, figured out.</h2>
+      <p>The hardest part of getting equipment isn't the equipment — it's the paperwork. We verify what you qualify for <em>before</em> you buy, and bill the funder directly wherever possible.</p>
+    </div>
+    <div class="fund-grid">
+      <article class="fcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></div>
+        <h3>ADP</h3>
+        <div class="amt">Up to 75% — 100% on ODSP/OW</div>
+        <p>Ontario's Assistive Devices Program for mobility, seating and more. We're an authorized vendor and handle the authorizer assessment and submission.</p>
+      </article>
+      <article class="fcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4z" opacity=".0"/><path d="M3 7h18M3 7l9-4 9 4M5 7v11h14V7M9 18v-4h6v4"/></svg></div>
+        <h3>Private insurance</h3>
+        <div class="amt">Often 100% to your plan max</div>
+        <p>Manulife, Sun Life, Canada Life, GreenShield and more. With Assignment of Benefits we bill your insurer directly — you pay only the gap.</p>
+      </article>
+      <article class="fcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2 3 6v6c0 5 3.6 8.7 9 10 5.4-1.3 9-5 9-10V6l-9-4Z"/></svg></div>
+        <h3>WSIB · Veterans · NIHB</h3>
+        <div class="amt">100% · direct-billed</div>
+        <p>Workplace injuries (WSIB), Veterans Affairs (via Medavie Blue Cross), and Non-Insured Health Benefits — fully covered for those who qualify.</p>
+      </article>
+      <article class="fcard reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12 12 3l9 9M5 10v10h14V10M10 20v-6h4v6"/></svg></div>
+        <h3>Home modifications</h3>
+        <div class="amt">Up to $15,000 — March of Dimes</div>
+        <p>Ramps, stairlifts and bathroom modifications can be funded through the Home &amp; Vehicle Modification Program and Ontario Renovates. We'll help you apply.</p>
+      </article>
+    </div>
+    <p style="margin-top:1.4rem;font-size:.92rem;color:var(--ink-soft)">*Coverage depends on eligibility and program rules. We confirm what applies to your situation — no guesswork, no surprises.</p>
+  </div>
+</section>
+
+<!-- products -->
+<section id="products" aria-labelledby="prod-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">What we provide</span>
+      <h2 id="prod-h">Everything for getting around &amp; staying safe at home</h2>
+      <p>One trusted partner for the full range — to buy or to rent, with expert fitting and in-home setup.</p>
+    </div>
+    <div class="prod-grid">
+      <article class="pcard reveal">
+        <div class="pc-top"><span class="tag">Most funded</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="17" cy="18" r="3.2"/><circle cx="7" cy="18" r="3.2"/><path d="M7 18 9.5 8H15l2 6M9.5 8C9 5.5 7.5 5 6 5"/></svg></div>
+        <div class="pc-body"><h3>Mobility</h3>
+          <ul><li>Manual wheelchairs</li><li>Power wheelchairs</li><li>Mobility scooters</li><li>Rollators &amp; walkers</li><li>Canes &amp; crutches</li><li>Seating &amp; cushions</li></ul></div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M6 12h12M6 16h12"/></svg></div>
+        <div class="pc-body"><h3>Home accessibility</h3>
+          <ul><li>Stairlifts</li><li>Porch lifts</li><li>Ramps &amp; railings</li><li>Ceiling &amp; floor lifts</li><li>Power lift recliners</li><li>Door openers</li></ul></div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12V7a3 3 0 0 1 6 0M4 12h16v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/></svg></div>
+        <div class="pc-body"><h3>Bathroom safety</h3>
+          <ul><li>Bath lifts</li><li>Grab bars</li><li>Shower chairs</li><li>Commodes</li><li>Raised toilet seats</li><li>Transfer benches</li></ul></div>
+      </article>
+      <article class="pcard reveal">
+        <div class="pc-top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16v13H4zM9 7V5a3 3 0 0 1 6 0v2M9 13h6"/></svg></div>
+        <div class="pc-body"><h3>Daily living</h3>
+          <ul><li>Bedroom aids</li><li>Living-area support</li><li>Personal care</li><li>Incontinence supplies</li><li>Dressing aids</li><li>Resupply program</li></ul></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- how it works -->
+<section id="how" class="tint" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Simple from day one</span>
+      <h2 id="how-h">How it works</h2>
+      <p>From first call to set-up at home — usually within a couple of days.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num"></div><h3>Tell us your needs</h3><p>Call us or book a free assessment. We listen and recommend the right equipment.</p></div>
+      <div class="step reveal"><div class="num"></div><h3>We check your funding</h3><p>We verify ADP, insurance and program eligibility before you commit to anything.</p></div>
+      <div class="step reveal"><div class="num"></div><h3>Approve &amp; we deliver</h3><p>We handle the paperwork and deliver to your door — typically in 24–48 hours.</p></div>
+      <div class="step reveal"><div class="num"></div><h3>Setup &amp; support</h3><p>We set it up, show you how to use it, and we're here for service and repairs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- rentals -->
+<section id="rentals" aria-labelledby="rent-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <span class="kicker" style="color:var(--ochre);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;display:inline-flex;align-items:center;gap:.5rem">Flexible &amp; short-term</span>
+      <h2 id="rent-h" style="margin-top:.7rem">Rent what you need, for as long as you need it</h2>
+      <p style="color:var(--ink-soft);font-size:1.12rem;margin-top:.8rem">Recovering from surgery, expecting visitors, or coming home from the hospital? Renting is the fast, affordable way to get the right equipment without buying.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Hospital beds, patient lifts &amp; wheelchairs</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Scooters, walkers &amp; stairlifts</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Daily, weekly or monthly terms</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Delivery, setup and pickup included</li>
+      </ul>
+      <a class="btn btn-primary" href="#contact" style="margin-top:1.6rem">Ask about rentals
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="panel dark reveal">
+      <h3 style="font-size:clamp(1.4rem,2.4vw,1.9rem)">Coming home from the hospital?</h3>
+      <p style="margin-top:.7rem">We work with discharge teams to get equipment set up <em>before</em> you arrive home — so the transition is safe and stress-free.</p>
+      <ul class="feat">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="9"/></svg> Same-day delivery for urgent discharges</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="9"/></svg> We coordinate funding with your care team</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="9"/></svg> One contact for everything you need</li>
+      </ul>
+      <a class="btn btn-accent" href="#partners" style="margin-top:1.6rem">For healthcare partners</a>
+    </div>
+  </div>
+</section>
+
+<!-- partners -->
+<section id="partners" class="tint" aria-labelledby="part-h">
+  <div class="wrap split">
+    <div class="partner-list reveal">
+      <div class="pl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M10 12h4M12 10v4"/></svg></span><div><b>Hospitals &amp; Hospital-at-Home</b><p>Fast, reliable equipment and rentals for safe discharge — with funding coordinated for the patient.</p></div></div>
+      <div class="pl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21V5l8-3 8 3v16M9 21v-5h6v5M8 8h2M14 8h2M8 12h2M14 12h2"/></svg></span><div><b>Retirement &amp; long-term care</b><p>Preferred-supplier programs, on-site resident clinic days, and preventive-maintenance contracts.</p></div></div>
+      <div class="pl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 4h6v3H9zM9 13l2 2 4-4"/></svg></span><div><b>OTs, PTs &amp; clinicians</b><p>A responsive partner who handles the funding paperwork so you can focus on your clients.</p></div></div>
+    </div>
+    <div class="reveal">
+      <span class="kicker" style="color:var(--ochre);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;display:inline-flex;align-items:center;gap:.5rem">For healthcare professionals</span>
+      <h2 id="part-h" style="margin-top:.7rem">The partner discharge teams &amp; care homes rely on</h2>
+      <p style="color:var(--ink-soft);font-size:1.12rem;margin-top:.8rem">We make referrals effortless: one point of contact, fast fulfillment, and funding navigation handled end-to-end — while always respecting your patients' right to choose their provider.</p>
+      <div class="hero-actions" style="margin-top:1.6rem">
+        <a class="btn btn-primary" href="#contact">Become a partner</a>
+        <a class="btn btn-ghost" href="#contact">Request a callback</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- about -->
+<section id="about" aria-labelledby="about-h">
+  <div class="wrap split">
+    <div class="reveal">
+      <span class="kicker" style="color:var(--ochre);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;display:inline-flex;align-items:center;gap:.5rem">About Help Mobility</span>
+      <h2 id="about-h" style="margin-top:.7rem">Local, caring, and on your side</h2>
+      <p style="color:var(--ink-soft);font-size:1.12rem;margin-top:.9rem">Help Mobility is a Greater Toronto Area provider of mobility and home-accessibility equipment. As an ADP-authorized vendor, we combine a full product range with something families tell us is rare: people who actually handle the funding and show up fast.</p>
+      <p style="color:var(--ink-soft);font-size:1.12rem;margin-top:.9rem">Whether you're buying, renting, or need a repair, our goal is the same — help you or your loved one stay safe, mobile, and independent at home.</p>
+      <div class="hero-actions" style="margin-top:1.6rem">
+        <a class="btn btn-primary" href="#contact">Talk to our team</a>
+        <a class="btn btn-ghost" href="#products">Browse products</a>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="quotes" style="grid-template-columns:1fr">
+        <figure class="quote">
+          <div class="mark" aria-hidden="true">“</div>
+          <p>[ Replace with a real client review — e.g. how quickly equipment arrived and how the funding was handled. ]</p>
+          <figcaption class="who">[ Client name ]<span>[ City, e.g. Mississauga ]</span></figcaption>
+        </figure>
+        <figure class="quote">
+          <div class="mark" aria-hidden="true">“</div>
+          <p>[ Replace with a real partner review — e.g. from a discharge planner or OT. ]</p>
+          <figcaption class="who">[ Name, role ]<span>[ Organization ]</span></figcaption>
+        </figure>
+      </div>
+      <span class="ph-flag">⚠ Placeholder reviews — replace with real, verifiable testimonials before publishing.</span>
+    </div>
+  </div>
+</section>
+
+<!-- contact -->
+<section id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <div class="contact reveal">
+      <div class="inner">
+        <div>
+          <span class="kicker" style="color:var(--ochre-soft);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;display:inline-flex;align-items:center;gap:.5rem">Get started</span>
+          <h2 id="contact-h" style="margin-top:.7rem">Let's find the right solution — and the funding for it</h2>
+          <p class="lead">Call us or send a message. We'll help you choose, check what you qualify for, and arrange delivery.</p>
+          <div class="contact-info">
+            <a href="tel:+10000000000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg> [ Phone number ]</a>
+            <a href="mailto:info@helpmobility.ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4zM4 6l8 6 8-6"/></svg> info@helpmobility.ca</a>
+            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg> <div>[ Showroom address ]<span>Serving the Greater Toronto Area</span></div></div>
+            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <div>[ Mon–Fri 9–5, Sat by appointment ]<span>Emergency rentals available</span></div></div>
+          </div>
+        </div>
+        <form action="mailto:info@helpmobility.ca" method="post" enctype="text/plain" aria-label="Contact form">
+          <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required /></div>
+          <div class="row2">
+            <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" /></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" /></div>
+          </div>
+          <div class="field"><label for="interest">I'm interested in</label>
+            <select id="interest" name="interest">
+              <option>Buying equipment</option><option>Renting equipment</option>
+              <option>Funding / ADP help</option><option>Repairs &amp; service</option>
+              <option>Healthcare partnership</option><option>Something else</option>
+            </select></div>
+          <div class="field"><label for="msg">How can we help?</label><textarea id="msg" name="message"></textarea></div>
+          <button class="btn btn-accent" type="submit">Send message
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7Z"/></svg></button>
+          <p class="formnote">Prefer to talk? Call us — we're happy to walk you through your options. (This form opens your email app; connect it to your preferred form service when you go live.)</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- footer -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" aria-label="Help Mobility home">
+          <svg class="logo" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" fill="#1C5A4A"/>
+            <circle cx="24" cy="24" r="13" fill="none" stroke="#F4EFE3" stroke-width="2.4"/>
+            <circle cx="24" cy="24" r="3.4" fill="#F4EFE3"/>
+            <path d="M24 11v5M24 32v5M11 24h5M32 24h5" stroke="#E7B45A" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M30 18l-8 8" stroke="#E7B45A" stroke-width="2.6" stroke-linecap="round"/>
+          </svg> Help&nbsp;Mobility
+        </a>
+        <p class="fdesc">ADP-authorized mobility &amp; home-accessibility equipment, with funding handled for you. Proudly serving the Greater Toronto Area.</p>
+      </div>
+      <div><h4>Products</h4>
+        <a href="#products">Mobility</a><a href="#products">Home accessibility</a><a href="#products">Bathroom safety</a><a href="#products">Daily living</a><a href="#rentals">Rentals</a></div>
+      <div><h4>Funding</h4>
+        <a href="#funding">ADP</a><a href="#funding">Private insurance</a><a href="#funding">WSIB &amp; Veterans</a><a href="#funding">Home modifications</a></div>
+      <div><h4>Company</h4>
+        <a href="#about">About us</a><a href="#partners">Healthcare partners</a><a href="#how">How it works</a><a href="#contact">Contact</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> Help Mobility. All rights reserved. · helpmobility.ca</span>
+      <span>Coverage subject to eligibility and program rules. ADP is a program of the Government of Ontario.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement, body=document.body, store=window.localStorage;
+
+  // ---- accessibility: text size ----
+  function setText(scale, save){
+    root.style.setProperty('--step', scale);
+    document.querySelectorAll('.a11y [data-text]').forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-text')===String(scale)?'true':'false');
+    });
+    if(save!==false){ try{store.setItem('hm-text',scale);}catch(e){} }
+  }
+  document.querySelectorAll('.a11y [data-text]').forEach(function(b){
+    b.addEventListener('click',function(){ setText(b.getAttribute('data-text')); });
+  });
+
+  // ---- accessibility: high contrast ----
+  var hcBtn=document.getElementById('hcToggle');
+  function setHC(on, save){
+    body.classList.toggle('hc', on);
+    hcBtn.setAttribute('aria-pressed', on?'true':'false');
+    if(save!==false){ try{store.setItem('hm-hc', on?'1':'0');}catch(e){} }
+  }
+  hcBtn.addEventListener('click',function(){ setHC(!body.classList.contains('hc')); });
+
+  // restore saved prefs
+  try{
+    var t=store.getItem('hm-text'); if(t) setText(t,false);
+    if(store.getItem('hm-hc')==='1') setHC(true,false);
+  }catch(e){}
+
+  // ---- mobile menu ----
+  var mb=document.getElementById('menuBtn'), nl=document.getElementById('navlinks');
+  mb.addEventListener('click',function(){
+    var open=nl.classList.toggle('open');
+    mb.setAttribute('aria-expanded', open?'true':'false');
+  });
+  nl.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){ nl.classList.remove('open'); mb.setAttribute('aria-expanded','false'); });
+  });
+
+  // ---- year ----
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  // ---- scroll reveal + active nav ----
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce && 'IntersectionObserver' in window){
+    var ro=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target);} });
+    },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  var links=Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+  var secs=links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if('IntersectionObserver' in window){
+    var so=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          var i=secs.indexOf(e.target);
+          if(i>-1 && links[i]) links[i].classList.add('active');
+        }
+      });
+    },{threshold:.5});
+    secs.forEach(function(s){ if(s) so.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
