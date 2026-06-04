@@ -60,6 +60,12 @@ for content; edit the `CITIES` list in that file to add more areas).
 `REVIEWS` in `assets/js/data.js` and a “What our customers say” section appears
 automatically. **No fake reviews were added.**
 
+**5. Performance (Core Web Vitals → rank + conversion).** Photos were resized to
+display size and served as **WebP with a JPEG fallback** via `<picture>`; the
+homepage hero is pre‑rendered for instant first paint and marked
+`fetchpriority="high"`. Image payload dropped ~66% (hero 486 KB → 134 KB).
+Re‑optimize after adding photos: `npm i -D sharp && node tools/optimize-images.js`.
+
 ### Pulled from the live site (now wired in)
 
 These were recovered from the site itself, so I applied them everywhere (header/

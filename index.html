@@ -112,7 +112,26 @@
   </header>
 
   <!-- Routed content -->
-  <main id="main"><div id="view"></div></main>
+  <main id="main"><div id="view">
+    <!-- Static first-paint hero (mirrors the app's home view for instant paint
+         and for crawlers; the SPA replaces #view with the full page on load). -->
+    <section class="hero"><div class="container"><div class="hero-grid">
+      <div>
+        <p class="eyebrow">Mobility &amp; home healthcare · Serving the Greater Toronto Area</p>
+        <h1>Welcome to Help Mobility</h1>
+        <p class="tagline">helping you get active, today!</p>
+        <p class="lead">At Help Mobility, we believe that comfort, safety, and independence should never be compromised. We specialize in providing high-quality equipment that enhances comfort, safety, and independence.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="#/quote">Request a free quote</a>
+          <a class="btn btn-accent btn-lg" href="tel:+19056159302"><span aria-hidden="true">📞</span> 905-615-9302</a>
+        </div>
+        <p class="hero-note"><span>✅ Free, no-obligation quote</span><span>🤝 Funding help (ADP · ODSP · WSIB)</span><span>🛟 Service 7 days a week</span></p>
+      </div>
+      <div class="hero-art">
+        <picture><source type="image/webp" srcset="assets/img/mobility.webp"><img src="assets/img/mobility.jpg" alt="A person staying active and independent with mobility support" width="560" height="747" fetchpriority="high"></picture>
+      </div>
+    </div></div></section>
+  </div></main>
 
   <!-- Footer -->
   <footer class="site-footer">

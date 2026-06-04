@@ -49,6 +49,7 @@ const RENTAL_BLURB = {
 
 /* ----------------------------------------------------------------- helpers */
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+const pic = (jpg, alt, w, h, attrs) => `<picture><source type="image/webp" srcset="${jpg.replace(/\.jpg$/, ".webp")}"><img src="${jpg}" alt="${esc(alt)}" width="${w}" height="${h}" ${attrs || 'loading="lazy"'}></picture>`;
 const jsonLd = (obj) => '<script type="application/ld+json">\n' + JSON.stringify(obj, null, 2) + "\n</script>";
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -179,7 +180,7 @@ function hero(eyebrow, h1, lead, img, imgAlt, notes) {
     <p class="eyebrow">${esc(eyebrow)}</p><h1>${esc(h1)}</h1><p class="lead">${esc(lead)}</p>
     <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/#/quote">Request a free quote</a><a class="btn btn-accent btn-lg" href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a></div>
     <p class="hero-note">${notes.map((n) => `<span>${n}</span>`).join("")}</p>
-  </div><div class="hero-art"><img src="${img}" alt="${esc(imgAlt)}" width="560" height="747"></div></div></div></section>`;
+  </div><div class="hero-art">${pic(img, imgAlt, 560, 747, 'fetchpriority="high"')}</div></div></div></section>`;
 }
 
 function write(rel, html) {

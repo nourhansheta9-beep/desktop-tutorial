@@ -152,6 +152,13 @@
   function go(hash) { location.hash = hash; }
 
   /* ----------------------------------------------------------------- pieces */
+  // WebP (with JPEG fallback) for fast, Core-Web-Vitals-friendly images.
+  function picture(jpg, alt, w, h, attrs) {
+    var webp = jpg.replace(/\.jpg$/, ".webp");
+    return '<picture><source type="image/webp" srcset="' + webp + '">' +
+      '<img src="' + jpg + '" alt="' + escapeHtml(alt) + '" width="' + w + '" height="' + h + '" ' +
+      (attrs || 'loading="lazy"') + "></picture>";
+  }
   function collectionCard(col, catId, catName) {
     return '<article class="col-card cat-' + catId + '">' +
       '<div class="col-body"><span class="col-tag">' + escapeHtml(catName) + "</span>" +
@@ -163,8 +170,7 @@
   }
   function categoryCard(c) {
     return '<a class="cat-card" href="#/shop?cat=' + c.id + '">' +
-      '<div class="cat-media"><img src="' + c.image + '" alt="' + escapeHtml(c.alt) +
-        '" loading="lazy" width="640" height="420"></div>' +
+      '<div class="cat-media">' + picture(c.image, c.alt, 640, 420) + "</div>" +
       '<div class="cat-card-body"><h3>' + escapeHtml(c.name) + "</h3>" +
         "<p>" + escapeHtml(c.blurb) + "</p>" +
         '<span class="more">Browse ' + escapeHtml(c.name) + " &rarr;</span></div>" +
@@ -269,7 +275,7 @@
           '<p class="hero-note"><span>✅ Free, no-obligation quote</span><span>🤝 Funding help (ADP · ODSP · WSIB)</span><span>🛟 Service 7 days a week</span></p>' +
         "</div>" +
         '<div class="hero-art">' +
-          '<img src="assets/img/mobility.jpg" alt="A person staying active and independent with mobility support" width="560" height="747" fetchpriority="high">' +
+          picture("assets/img/mobility.jpg", "A person staying active and independent with mobility support", 560, 747, 'fetchpriority="high"') +
         "</div>" +
       "</div></div></section>" +
 
@@ -343,7 +349,7 @@
       var c = catById(catId);
       body =
         '<div class="cat-hero cat-' + c.id + '">' +
-          '<img src="' + c.image + '" alt="' + escapeHtml(c.alt) + '" loading="lazy" width="640" height="420">' +
+          picture(c.image, c.alt, 640, 420) +
           "<div><h2>" + escapeHtml(c.name) + "</h2><p>" + escapeHtml(c.blurb) + "</p>" +
           '<a class="btn btn-accent" href="#/quote">Request a quote</a></div>' +
         "</div>" +
