@@ -43,14 +43,18 @@ phone‑number tap. *(No GA4 property was found on the site — add a GA4 Measur
 to `CONFIG.gaId` if you want GA4 reporting too. To count Ads conversions, create a
 conversion action in Google Ads and I'll add its `send_to` label.)*
 
-**3. Real SEO landing pages — generated.** Standalone, crawlable pages now exist
-(shared styling, real content, JSON‑LD, click‑to‑call):
-- `/products/mobility/`, `/products/accessibility/`, `/products/bathroom/`, `/products/daily/`
-- `/areas/<city>/` for Toronto, Mississauga, Brampton, Scarborough, North York, Etobicoke, Markham, Vaughan
-- `/areas/` hub, all listed in `sitemap.xml` and linked from the footer.
+**3. Real SEO landing pages — 24 generated.** Standalone, crawlable pages
+(shared styling, real content read from `data.js`, JSON‑LD, click‑to‑call, the
+Google Ads tag), all in `sitemap.xml` and cross‑linked from the footer/nav:
+- **Products** (×4): `/products/{mobility,accessibility,bathroom,daily}/`
+- **Rentals**: `/rentals/` hub + a page per line — hospital‑bed, wheelchair/transport,
+  scooter, stairlift, walker/rollator, lift‑chair, patient‑lift (these target
+  high‑intent searches like "hospital bed rental Toronto")
+- **Services**: `/repairs/`, `/funding/`, `/industries/`
+- **Areas** (×8): `/areas/{toronto,mississauga,brampton,scarborough,north-york,etobicoke,markham,vaughan}/` + an `/areas/` hub
 
-Regenerate/expand any time: **`node tools/build-landing.js`** (edit the `CITIES`
-list in that file to add more areas).
+Regenerate/expand any time: **`node tools/build-landing.js`** (it reads `data.js`
+for content; edit the `CITIES` list in that file to add more areas).
 
 **4. Reviews — section ready, needs real reviews.** Add genuine reviews to
 `REVIEWS` in `assets/js/data.js` and a “What our customers say” section appears
