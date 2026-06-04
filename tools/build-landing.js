@@ -33,7 +33,8 @@ const ADS = (HM.CONFIG && HM.CONFIG.googleAdsId) || "";
 const LOGO = "/assets/img/logo-dark.png";
 
 // Curated, high-intent GTA cities. Expand once GBP/analytics confirm demand.
-const CITIES = ["Toronto", "Mississauga", "Brampton", "Scarborough", "North York", "Etobicoke", "Markham", "Vaughan"];
+const CITIES = ["Toronto", "Mississauga", "Brampton", "Scarborough", "North York", "Etobicoke", "Markham", "Vaughan",
+  "Oakville", "Burlington", "Richmond Hill", "Oshawa", "Pickering", "Milton"];
 
 // Category → hero image + short, useful per-rental descriptions.
 const CAT_IMG = { mobility: "power-header", accessibility: "lift-chair", bathroom: "bathroom", daily: "smartdrive" };
@@ -85,7 +86,14 @@ function head(opts) {
   <meta property="og:title" content="${esc(opts.title)}" />
   <meta property="og:description" content="${esc(opts.description)}" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="${ORIGIN}${LOGO}" />
+  <meta property="og:url" content="${ORIGIN}${opts.canonical}" />
+  <meta property="og:image" content="${ORIGIN}/assets/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${esc(opts.title)}" />
+  <meta name="twitter:description" content="${esc(opts.description)}" />
+  <meta name="twitter:image" content="${ORIGIN}/assets/img/og-image.png" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   ${opts.ld.map(jsonLd).join("\n  ")}${ADS ? `
   <!-- Google Ads (gtag) — remarketing + conversion tracking -->
