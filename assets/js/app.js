@@ -11,7 +11,8 @@
 
   var HM = window.HM || {};
   var COMPANY = HM.COMPANY, VALUES = HM.VALUES, CATEGORIES = HM.CATEGORIES,
-      RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING;
+      RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING,
+      HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ;
 
   var QUOTE_KEY = "hm_quote_v1";
   var LEADS_KEY = "hm_leads_v1";
@@ -147,6 +148,55 @@
       }).join("") + "</nav></div>";
   }
 
+  // Cost-objection killer: funding is the single biggest reason people hesitate.
+  function fundingBanner() {
+    var list = FUNDING.slice(0, 6).map(function (f) { return "<li>" + escapeHtml(f.name) + "</li>"; }).join("");
+    return '<section class="section"><div class="container"><div class="funding-banner">' +
+      "<div><p class=\"eyebrow\">Worried about the cost?</p>" +
+        "<h2>You may not have to pay full price</h2>" +
+        "<p class=\"lead\">We help you access government and insurer programs that can cover part — or all — of the cost of your equipment. We’ll tell you what you qualify for.</p>" +
+        '<div class="cta-actions cta-left"><a class="btn btn-primary btn-lg" href="#/funding">See funding options</a>' + phoneCta("btn-ghost btn-lg") + "</div></div>" +
+      '<ul class="ticks big">' + list + "</ul>" +
+    "</div></div></section>";
+  }
+
+  function howItWorks() {
+    var steps = HOWITWORKS.map(function (s) {
+      return '<div class="step"><div class="step-n" aria-hidden="true">' + escapeHtml(s.step) + "</div>" +
+        "<h3>" + escapeHtml(s.title) + "</h3><p>" + escapeHtml(s.text) + "</p></div>";
+    }).join("");
+    return '<section class="section alt"><div class="container">' +
+      '<div class="section-head"><div><h2>How it works</h2><p>Getting the right equipment is simple — and we’re with you the whole way.</p></div></div>' +
+      '<div class="steps">' + steps + "</div></div></section>";
+  }
+
+  function faqSection() {
+    var items = FAQ.map(function (f, i) {
+      return '<details class="faq-item"' + (i === 0 ? " open" : "") + "><summary>" + escapeHtml(f.q) +
+        '</summary><div class="faq-a">' + escapeHtml(f.a) + "</div></details>";
+    }).join("");
+    return '<section class="section"><div class="container">' +
+      '<div class="section-head"><div><h2>Questions? Answers.</h2><p>The things people ask us most, before they get in touch.</p></div></div>' +
+      '<div class="faq">' + items + "</div></div></section>";
+  }
+
+  // Lowest-friction lead capture: just a name + phone, "we'll call you".
+  function callbackCard() {
+    return '<div class="callback-card">' +
+      "<h2>Prefer we call you?</h2>" +
+      '<p class="muted">Leave your name and number and a specialist will call you back — usually the same day.</p>' +
+      '<form id="callback-form" novalidate>' +
+        '<div class="field"><label for="cb-name">Name <span class="req" aria-hidden="true">*</span></label>' +
+          '<input id="cb-name" name="name" type="text" autocomplete="name" required></div>' +
+        '<div class="field"><label for="cb-phone">Phone <span class="req" aria-hidden="true">*</span></label>' +
+          '<input id="cb-phone" name="phone" type="tel" autocomplete="tel" required></div>' +
+        '<button type="submit" class="btn btn-accent btn-lg btn-block">Call me back</button>' +
+        '<span class="error-msg" id="cb-error" role="alert"></span>' +
+      "</form>" +
+      '<p class="fine muted">Or call us now: <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a></p>" +
+    "</div>";
+  }
+
   /* ------------------------------------------------------------------ views */
   function renderHome() {
     var values = VALUES.map(function (v) {
@@ -160,10 +210,6 @@
       return '<li>' + escapeHtml(r.name) + "</li>";
     }).join("");
 
-    var funding = FUNDING.slice(0, 6).map(function (f) {
-      return '<li><strong>' + escapeHtml(f.name) + "</strong></li>";
-    }).join("");
-
     return '' +
       '<section class="hero"><div class="container"><div class="hero-grid">' +
         "<div>" +
@@ -172,10 +218,10 @@
           '<p class="tagline">' + escapeHtml(COMPANY.tagline) + "</p>" +
           '<p class="lead">' + escapeHtml(COMPANY.intro) + " " + escapeHtml(COMPANY.specialise) + "</p>" +
           '<div class="hero-cta">' +
-            '<a class="btn btn-primary btn-lg" href="#/shop">Explore products</a>' +
-            '<a class="btn btn-accent btn-lg" href="#/quote">Request a quote</a>' +
+            '<a class="btn btn-primary btn-lg" href="#/quote">Request a free quote</a>' +
+            phoneCta("btn-accent btn-lg") +
           "</div>" +
-          '<p class="hero-phone">Questions? Call <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a> — 7 days a week.</p>" +
+          '<p class="hero-note"><span>✅ Free, no-obligation quote</span><span>🤝 Funding help (ADP · ODSP · WSIB)</span><span>🛟 Service 7 days a week</span></p>' +
         "</div>" +
         '<div class="hero-art">' +
           '<img src="assets/img/mobility.jpg" alt="A person staying active and independent with mobility support" width="560" height="747" fetchpriority="high">' +
@@ -184,37 +230,38 @@
 
       '<div class="container"><div class="value-strip">' + values + "</div></div>" +
 
+      fundingBanner() +
+
       '<section class="section"><div class="container">' +
         '<div class="section-head"><div><h2>Shop by need</h2><p>Four ways we help you stay comfortable, safe and independent at home.</p></div>' +
         '<a class="btn btn-ghost" href="#/shop">View all products</a></div>' +
         '<div class="cat-grid">' + cats + "</div>" +
       "</div></section>" +
 
-      '<section class="section alt"><div class="container"><div class="mission">' +
+      howItWorks() +
+
+      '<section class="section"><div class="container"><div class="mission">' +
         "<h2>Empowering independence through smart solutions</h2>" +
         '<p class="lead">' + escapeHtml(COMPANY.mission) + "</p>" +
       "</div></div></section>" +
 
-      '<section class="section"><div class="container"><div class="split">' +
+      '<section class="section alt"><div class="container"><div class="split">' +
         '<div class="split-card">' +
           "<h2>Rent instead of buy</h2>" +
           "<p>Short-term need, recovery or just trying before you buy? Rent quality equipment by the month.</p>" +
           '<ul class="ticks">' + rentals + "</ul>" +
           '<a class="btn btn-primary" href="#/rentals">See rental options</a>' +
         "</div>" +
-        '<div class="split-card accent">' +
-          "<h2>Funding &amp; assistance</h2>" +
-          "<p>You may not have to pay full price. We help you access the programs you qualify for.</p>" +
-          '<ul class="ticks">' + funding + "</ul>" +
-          '<a class="btn btn-primary" href="#/funding">Explore funding</a>' +
-        "</div>" +
+        callbackCard() +
       "</div></div></section>" +
 
-      '<section class="section alt"><div class="container"><div class="cta-band">' +
+      faqSection() +
+
+      '<section class="section"><div class="container"><div class="cta-band">' +
         "<h2>Not sure what you need?</h2>" +
         "<p>Tell us about your situation and a Help Mobility specialist will recommend the right solution and prepare a clear quote — buy or rent.</p>" +
         '<div class="cta-actions">' +
-          '<a class="btn btn-accent btn-lg" href="#/quote">Request a quote</a>' +
+          '<a class="btn btn-accent btn-lg" href="#/quote">Request a free quote</a>' +
           phoneCta("btn-outline btn-lg") +
         "</div>" +
       "</div></div></section>";
@@ -340,7 +387,7 @@
         '<div class="cta-band" style="margin-top:1.6rem"><h2>Find out what you qualify for</h2>' +
         "<p>Tell us a little about your needs and we’ll guide you through your funding options.</p>" +
         '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/contact">Ask about funding</a>' + phoneCta("btn-outline btn-lg") + "</div></div>" +
-      "</div></section>";
+      "</div></section>" + faqSection();
   }
 
   function field(name, label, type, required, autocomplete) {
@@ -541,7 +588,36 @@
       handleRequestSubmit(e.target);
       return;
     }
+    if (e.target.id === "callback-form") {
+      e.preventDefault();
+      handleCallbackSubmit(e.target);
+      return;
+    }
   });
+
+  function handleCallbackSubmit(form) {
+    var name = (form.querySelector("[name=name]").value || "").trim();
+    var phone = (form.querySelector("[name=phone]").value || "").trim();
+    var err = form.querySelector("#cb-error");
+    var nameOk = name.length >= 2;
+    var phoneOk = phone.replace(/[^0-9]/g, "").length >= 10;
+    if (!nameOk || !phoneOk) {
+      if (err) err.textContent = !nameOk ? "Please enter your name." : "Please enter a valid phone number.";
+      form.querySelector(!nameOk ? "[name=name]" : "[name=phone]").focus();
+      return;
+    }
+    var lead = {
+      ref: makeRef(), type: "callback", date: new Date().toISOString(),
+      customer: { name: name, phone: phone, contact: "Phone call" }, items: []
+    };
+    saveLead(lead);
+    /* Lead delivery hook — see handleRequestSubmit for wiring to your CRM/endpoint. */
+    var card = form.closest(".callback-card") || form.parentNode;
+    card.innerHTML = '<div class="cb-success"><div class="check" aria-hidden="true">✓</div>' +
+      "<h2>Thanks, " + escapeHtml(name.split(" ")[0]) + "!</h2>" +
+      "<p>We’ll call you at <strong>" + escapeHtml(phone) + "</strong> shortly. Your reference is <strong>" + escapeHtml(lead.ref) + "</strong>.</p></div>";
+    toast('<span class="e" aria-hidden="true">✅</span><span>Got it — we’ll call you back shortly.</span>');
+  }
 
   function handleRequestSubmit(form) {
     var type = form.getAttribute("data-type");

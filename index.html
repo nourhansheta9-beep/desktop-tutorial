@@ -18,6 +18,41 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/img/logo-dark.png" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <!-- Local business structured data (helps Google show the business + click-to-call) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalSupplyStore",
+    "name": "Help Mobility",
+    "slogan": "helping you get active, today!",
+    "description": "Sales, rentals and repairs of mobility and home-healthcare equipment — wheelchairs, scooters, stairlifts, ramps, bathroom safety and more — across the Greater Toronto Area.",
+    "url": "https://helpmobility.ca/",
+    "image": "https://helpmobility.ca/cdn/shop/files/Help_Mobility-dark.png",
+    "telephone": "+1-905-615-9302",
+    "areaServed": { "@type": "Place", "name": "Greater Toronto Area, Ontario, Canada" },
+    "makesOffer": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mobility equipment sales" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mobility equipment rentals" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Equipment repairs & maintenance" } }
+    ]
+  }
+  </script>
+  <!-- FAQ structured data (eligible for rich results in search) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Do I have to pay full price for my equipment?", "acceptedAnswer": { "@type": "Answer", "text": "Often, no. We help you access funding programs like ADP, ODSP, Ontario Works, WSIB, March of Dimes and Spinal Cord Injury Ontario, which can cover part — or all — of the cost. Ask us what you may qualify for." } },
+      { "@type": "Question", "name": "Can I rent instead of buying?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Hospital beds, wheelchairs, scooters, stairlifts, walkers, lift chairs and patient lifts are available to rent by the month — ideal for recovery or short-term needs." } },
+      { "@type": "Question", "name": "Do you deliver and install?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We deliver across the Greater Toronto Area and install equipment such as stairlifts, ramps and lifts so it is ready to use safely." } },
+      { "@type": "Question", "name": "Do you repair and service equipment?", "acceptedAnswer": { "@type": "Answer", "text": "We do — 7 days a week, with same-day repairs across the GTA and loaner equipment available while yours is serviced." } },
+      { "@type": "Question", "name": "Which areas do you serve?", "acceptedAnswer": { "@type": "Answer", "text": "We serve the Greater Toronto Area." } },
+      { "@type": "Question", "name": "How do I get started?", "acceptedAnswer": { "@type": "Answer", "text": "Call 905-615-9302 or request a free, no-obligation quote online, and a Help Mobility specialist will help you choose." } }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +80,7 @@
       </form>
 
       <div class="header-actions">
+        <a class="btn btn-ghost btn-sm call-link" href="tel:+19056159302">📞 905-615-9302</a>
         <a class="btn btn-accent btn-sm quote-btn" href="#/quote" aria-label="Your quote request list">
           📝 Quote
           <span class="quote-count" id="quote-count" hidden>0</span>
@@ -105,6 +141,12 @@
       <span class="muted">Rebuilt static demo of helpmobility.ca.</span>
     </div>
   </footer>
+
+  <!-- Sticky mobile conversion bar (phones only): one tap to call or get a quote -->
+  <div class="mobile-cta" aria-label="Quick contact">
+    <a class="btn btn-accent" href="tel:+19056159302">📞 Call now</a>
+    <a class="btn btn-primary" href="#/quote">📝 Free quote</a>
+  </div>
 
   <!-- Toast notifications -->
   <div class="toast-wrap" id="toasts" aria-live="polite"></div>

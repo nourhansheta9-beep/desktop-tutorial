@@ -149,6 +149,23 @@
     { name: "Spinal Cord Injury Ontario", text: "Equipment-access programs for people living with a spinal cord injury." }
   ];
 
+  // "How it works" — three simple, reassuring steps (reduces purchase anxiety).
+  var HOWITWORKS = [
+    { step: "1", title: "Tell us what you need", text: "Call us or send a quick request. We listen to your situation — no jargon, no pressure." },
+    { step: "2", title: "We recommend & handle funding", text: "We suggest the right equipment to buy or rent, and help you apply for any funding you qualify for." },
+    { step: "3", title: "Delivery, setup & support", text: "We deliver and set up across the GTA — and we’re here 7 days a week for service and repairs." }
+  ];
+
+  // FAQ — answers the top objections (cost, rent, delivery, repairs, area) and helps SEO.
+  var FAQ = [
+    { q: "Do I have to pay full price for my equipment?", a: "Often, no. We help you access funding programs like ADP, ODSP, Ontario Works, WSIB, March of Dimes and Spinal Cord Injury Ontario, which can cover part — or all — of the cost. Ask us what you may qualify for." },
+    { q: "Can I rent instead of buying?", a: "Yes. Hospital beds, wheelchairs, scooters, stairlifts, walkers, lift chairs and patient lifts are available to rent by the month — ideal for recovery or short-term needs." },
+    { q: "Do you deliver and install?", a: "Yes. We deliver across the Greater Toronto Area and install equipment such as stairlifts, ramps and lifts so it’s ready to use safely." },
+    { q: "Do you repair and service equipment?", a: "We do — 7 days a week, with same-day repairs across the GTA and loaner equipment available while yours is serviced." },
+    { q: "Which areas do you serve?", a: "We serve the Greater Toronto Area." },
+    { q: "How do I get started?", a: "Call 905-615-9302 or request a free, no-obligation quote online, and a Help Mobility specialist will help you choose." }
+  ];
+
   // expose on a single global namespace (no ES modules → also works from file://)
   window.HM = window.HM || {};
   window.HM.COMPANY = COMPANY;
@@ -158,4 +175,6 @@
   window.HM.REPAIRS = REPAIRS;
   window.HM.INDUSTRIES = INDUSTRIES;
   window.HM.FUNDING = FUNDING;
+  window.HM.HOWITWORKS = HOWITWORKS;
+  window.HM.FAQ = FAQ;
 })();

@@ -330,6 +330,62 @@ h1:focus, h2:focus { outline: none; }
 .toast a { color: #9ed8a6; font-weight: 700; }
 @keyframes toastin { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none; } }
 
+/* ---------------- Hero trust microcopy ---------------- */
+.hero-note { display: flex; flex-wrap: wrap; gap: .4rem 1.3rem; margin-top: 1.2rem; color: var(--ink-soft); font-weight: 600; font-size: .95rem; }
+.hero-note span { display: inline-flex; align-items: center; gap: .35rem; }
+.cta-actions.cta-left { justify-content: flex-start; }
+.btn-block { width: 100%; }
+
+/* ---------------- Funding banner (cost-objection killer) ---------------- */
+.funding-banner {
+  display: grid; grid-template-columns: 1.3fr .9fr; gap: 1.8rem; align-items: center;
+  background: linear-gradient(135deg, var(--green-050), #fff 78%);
+  border: 1px solid #cce7cf; border-left: 6px solid var(--green); border-radius: var(--radius); padding: 2rem;
+}
+.funding-banner .lead { font-size: 1.12rem; color: var(--ink-soft); margin: .4rem 0 1.2rem; }
+.ticks.big { margin: 0; gap: .55rem; }
+.ticks.big li { font-weight: 600; }
+
+/* ---------------- How it works ---------------- */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; }
+.step-n { width: 44px; height: 44px; border-radius: 999px; background: var(--blue); color: #fff; font-weight: 800; font-size: 1.2rem; display: grid; place-items: center; margin-bottom: .8rem; }
+.step h3 { margin: 0 0 .35rem; }
+.step p { margin: 0; color: var(--ink-soft); }
+
+/* ---------------- FAQ accordion ---------------- */
+.faq { display: grid; gap: .7rem; max-width: 880px; }
+.faq-item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+.faq-item summary {
+  cursor: pointer; list-style: none; padding: 1.1rem 1.3rem; font-weight: 700; font-size: 1.05rem; color: var(--ink);
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 44px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; color: var(--blue); font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.faq-item[open] summary::after { content: "\2013"; }
+.faq-item summary:hover { color: var(--blue); }
+.faq-a { padding: 0 1.3rem 1.2rem; color: var(--ink-soft); }
+
+/* ---------------- Callback card (low-friction lead capture) ---------------- */
+.callback-card { background: var(--blue); color: #fff; border-radius: var(--radius); padding: 1.8rem; }
+.callback-card h2 { color: #fff; margin-top: 0; }
+.callback-card .muted { color: #cfe0f0; }
+.callback-card form { display: grid; gap: .8rem; margin-top: 1rem; }
+.callback-card .field label { color: #fff; }
+.callback-card .field input { border-color: transparent; }
+.callback-card .error-msg { color: #ffd7cf; font-size: .9rem; display: block; min-height: 1.1em; }
+.callback-card .fine { margin-top: .9rem; color: #cfe0f0; }
+.callback-card .fine a { color: #fff; font-weight: 700; text-decoration: underline; }
+.cb-success { text-align: center; padding: 1rem 0; }
+.cb-success .check { width: 64px; height: 64px; border-radius: 999px; background: #fff; color: var(--green); display: grid; place-items: center; font-size: 2rem; margin: 0 auto 1rem; }
+.cb-success h2 { color: #fff; }
+
+/* ---------------- Header desktop call link ---------------- */
+.call-link { font-weight: 700; }
+
+/* ---------------- Sticky mobile call/quote bar ---------------- */
+.mobile-cta { display: none; }
+
 /* =========================================================
    Responsive
    ========================================================= */
@@ -340,6 +396,7 @@ h1:focus, h2:focus { outline: none; }
   .col-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .value-strip { grid-template-columns: repeat(2, 1fr); }
+  .funding-banner { grid-template-columns: 1fr; }
   .split { grid-template-columns: 1fr; }
   .quote-grid { grid-template-columns: 1fr; }
   .q-list { position: static; }
@@ -368,6 +425,17 @@ h1:focus, h2:focus { outline: none; }
   .form-grid { grid-template-columns: 1fr; }
   .col-card { flex-direction: column; align-items: flex-start; gap: .8rem; }
   .col-card .btn { width: 100%; }
+  .steps { grid-template-columns: 1fr; }
+  .funding-banner { padding: 1.5rem; }
+  /* sticky mobile conversion bar: always-visible Call + Free quote */
+  .call-link { display: none; }
+  .mobile-cta {
+    display: flex; gap: .6rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 95;
+    background: #fff; border-top: 1px solid var(--line); padding: .6rem .8rem; box-shadow: 0 -6px 20px rgba(0,0,0,.08);
+  }
+  .mobile-cta .btn { flex: 1; min-height: 52px; }
+  body { padding-bottom: 80px; }
+  .toast-wrap { bottom: 92px; }
 }
 
 @media (max-width: 460px) {
