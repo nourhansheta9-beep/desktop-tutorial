@@ -1,13 +1,13 @@
 {
   "name": "Help Mobility — Mobility & Home Healthcare",
   "short_name": "Help Mobility",
-  "description": "Browse and request a quote for wheelchairs, scooters, stairlifts, ramps, bathroom safety and homecare beds. Buy or rent across the GTA.",
+  "description": "Buy, rent or repair wheelchairs, scooters, stairlifts, ramps, bathroom safety and homecare equipment across the Greater Toronto Area.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f6f9f9",
-  "theme_color": "#0e7c86",
+  "background_color": "#f5f8fb",
+  "theme_color": "#004678",
   "categories": ["shopping", "medical", "health"],
   "lang": "en-CA",
   "icons": [

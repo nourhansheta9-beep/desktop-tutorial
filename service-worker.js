@@ -1,5 +1,5 @@
 /* Help Mobility — service worker (offline app shell for PWA install) */
-var CACHE = "help-mobility-v1";
+var CACHE = "help-mobility-v2";
 var ASSETS = [
   "./",
   "./index.html",
@@ -7,7 +7,13 @@ var ASSETS = [
   "./assets/js/data.js",
   "./assets/js/app.js",
   "./manifest.webmanifest",
-  "./assets/icons/icon.svg"
+  "./assets/icons/icon.svg",
+  "./assets/img/logo-dark.png",
+  "./assets/img/mobility.jpg",
+  "./assets/img/power-header.jpg",
+  "./assets/img/lift-chair.jpg",
+  "./assets/img/bathroom.jpg",
+  "./assets/img/smartdrive.jpg"
 ];
 
 self.addEventListener("install", function (e) {

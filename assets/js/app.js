@@ -1,89 +1,72 @@
 /*
- * Help Mobility — Storefront application
- * --------------------------------------
- * Vanilla JS single-page app (hash routing, no build step, runs from file://
- * or any static host). Conversion-focused: browse → choose buy/rent →
- * request a quote / book a free assessment (captures the lead).
+ * Help Mobility — website application
+ * -----------------------------------
+ * Vanilla JS, hash-routed single-page app. No build step; runs from file://
+ * or any static host. Faithful to the real Help Mobility site: browse the real
+ * product categories & collections, rentals, repairs, funding and industries —
+ * then turn interest into a contactable quote request (a real lead).
  */
 (function () {
   "use strict";
 
   var HM = window.HM || {};
-  var COMPANY = HM.COMPANY, CATEGORIES = HM.CATEGORIES, PRODUCTS = HM.PRODUCTS, TESTIMONIALS = HM.TESTIMONIALS;
+  var COMPANY = HM.COMPANY, VALUES = HM.VALUES, CATEGORIES = HM.CATEGORIES,
+      RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING;
 
-  var CART_KEY = "hm_cart_v1";
-  var LEADS_KEY = "hm_quotes_v1";
+  var QUOTE_KEY = "hm_quote_v1";
+  var LEADS_KEY = "hm_leads_v1";
+
+  // Flat index of every collection for search + lookups.
+  var ALL_COLLECTIONS = [];
+  CATEGORIES.forEach(function (c) {
+    c.collections.forEach(function (col) {
+      ALL_COLLECTIONS.push({ slug: col.slug, name: col.name, cat: c.id, catName: c.name });
+    });
+  });
 
   /* ------------------------------------------------------------------ utils */
-  function money(n) {
-    return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(n);
-  }
-  function byId(id) { return PRODUCTS.filter(function (p) { return p.id === id; })[0]; }
-  function catName(id) { var c = CATEGORIES.filter(function (c) { return c.id === id; })[0]; return c ? c.name : ""; }
   function escapeHtml(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (m) {
       return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m];
     });
   }
-  function stars(rating) {
-    var full = Math.round(rating);
-    return "★★★★★☆☆☆☆☆".slice(5 - full, 10 - full);
-  }
-  function priceLabel(p) {
-    return (p.from ? '<span class="from">from </span>' : "") + money(p.price);
+  function catById(id) { return CATEGORIES.filter(function (c) { return c.id === id; })[0]; }
+  function phoneCta(cls) {
+    return '<a class="btn ' + (cls || "btn-ghost") + '" href="' + COMPANY.phoneHref + '">' +
+      '<span aria-hidden="true">📞</span> ' + escapeHtml(COMPANY.phone) + "</a>";
   }
 
-  /* ------------------------------------------------------------------ cart */
-  function loadCart() {
-    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  /* ------------------------------------------------------------- quote list */
+  function loadQuote() {
+    try { return JSON.parse(localStorage.getItem(QUOTE_KEY)) || []; }
     catch (e) { return []; }
   }
-  function saveCart(cart) {
-    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
-    updateCartBadge();
+  function saveQuote() {
+    try { localStorage.setItem(QUOTE_KEY, JSON.stringify(quote)); } catch (e) {}
+    updateQuoteBadge();
   }
-  var cart = loadCart();
+  var quote = loadQuote();
 
-  function cartCount() { return cart.reduce(function (n, i) { return n + i.qty; }, 0); }
-  function findLine(id, mode) {
-    for (var i = 0; i < cart.length; i++) if (cart[i].id === id && cart[i].mode === mode) return cart[i];
-    return null;
+  function keyOf(item) { return item.id + "|" + (item.note || ""); }
+  function hasItem(id, note) {
+    return quote.some(function (i) { return keyOf(i) === id + "|" + (note || ""); });
   }
-  function addToCart(id, mode, qty) {
-    var p = byId(id); if (!p) return;
-    if (mode === "rent" && !p.rent) mode = "buy";
-    var line = findLine(id, mode);
-    if (line) line.qty += qty; else cart.push({ id: id, mode: mode, qty: qty });
-    saveCart(cart);
+  function addItem(id, name, note) {
+    if (hasItem(id, note)) return false;
+    quote.push({ id: id, name: name, note: note || "" });
+    saveQuote();
+    return true;
   }
-  function setQty(id, mode, qty) {
-    var line = findLine(id, mode); if (!line) return;
-    line.qty = Math.max(0, qty);
-    if (line.qty === 0) cart = cart.filter(function (l) { return l !== line; });
-    saveCart(cart);
+  function removeItem(id, note) {
+    quote = quote.filter(function (i) { return keyOf(i) !== id + "|" + (note || ""); });
+    saveQuote();
   }
-  function removeLine(id, mode) {
-    cart = cart.filter(function (l) { return !(l.id === id && l.mode === mode); });
-    saveCart(cart);
-  }
-  function clearCart() { cart = []; saveCart(cart); }
-
-  function cartTotals() {
-    var t = { buy: 0, rent: 0, buyCount: 0, rentCount: 0 };
-    cart.forEach(function (l) {
-      var p = byId(l.id); if (!p) return;
-      if (l.mode === "rent" && p.rent) { t.rent += p.rent * l.qty; t.rentCount += l.qty; }
-      else { t.buy += p.price * l.qty; t.buyCount += l.qty; }
-    });
-    return t;
-  }
-
-  function updateCartBadge() {
-    var el = document.getElementById("cart-count");
+  function clearQuote() { quote = []; saveQuote(); }
+  function updateQuoteBadge() {
+    var el = document.getElementById("quote-count");
     if (!el) return;
-    var n = cartCount();
-    el.textContent = n;
-    el.hidden = n === 0;
+    el.textContent = quote.length;
+    el.hidden = quote.length === 0;
   }
 
   /* ------------------------------------------------------------------ leads */
@@ -99,8 +82,8 @@
   }
   function getLead(ref) {
     try {
-      var all = JSON.parse(localStorage.getItem(LEADS_KEY)) || [];
-      return all.filter(function (l) { return l.ref === ref; })[0] || null;
+      return (JSON.parse(localStorage.getItem(LEADS_KEY)) || [])
+        .filter(function (l) { return l.ref === ref; })[0] || null;
     } catch (e) { return null; }
   }
 
@@ -120,7 +103,7 @@
     }, ms || 3200);
   }
 
-  /* ------------------------------------------------------------------ router */
+  /* ----------------------------------------------------------------- router */
   function parseHash() {
     var raw = location.hash.replace(/^#/, "") || "/";
     var qi = raw.indexOf("?");
@@ -137,420 +120,383 @@
   }
   function go(hash) { location.hash = hash; }
 
-  /* ------------------------------------------------------------------ views */
-  function productCard(p) {
-    var badge = p.popular ? '<span class="badge">★ Popular</span>' : "";
-    var rentBadge = p.rent ? '<span class="badge rentbuy">Rent or Buy</span>' : "";
-    var rentNote = p.rent ? '<div class="rent-note">or rent ' + money(p.rent) + "/mo</div>" : "";
-    return '' +
-      '<article class="card">' +
-        '<a class="thumb cat-' + p.cat + '" href="#/product/' + p.id + '" aria-label="' + escapeHtml(p.name) + '">' +
-          badge + rentBadge + "<span>" + p.emoji + "</span>" +
-        "</a>" +
-        '<div class="body">' +
-          '<div class="cat-tag">' + escapeHtml(catName(p.cat)) + "</div>" +
-          "<h3>" + escapeHtml(p.name) + "</h3>" +
-          '<div class="stars">' + stars(p.rating) + ' <small>' + p.rating.toFixed(1) + " (" + p.reviews + ")</small></div>" +
-          '<p class="blurb">' + escapeHtml(p.blurb) + "</p>" +
-          '<div class="price-row"><span class="price">' + priceLabel(p) + "</span></div>" +
-          rentNote +
-          '<div class="actions">' +
-            '<a class="btn btn-ghost btn-sm" href="#/product/' + p.id + '">Details</a>' +
-            '<button class="btn btn-primary btn-sm" data-action="add" data-id="' + p.id + '" data-mode="buy">Add to quote</button>' +
-          "</div>" +
-        "</div>" +
+  /* ----------------------------------------------------------------- pieces */
+  function collectionCard(col, catId, catName) {
+    return '<article class="col-card cat-' + catId + '">' +
+      '<div class="col-body"><span class="col-tag">' + escapeHtml(catName) + "</span>" +
+        "<h3>" + escapeHtml(col.name) + "</h3></div>" +
+      '<button class="btn btn-ghost btn-sm" data-action="add" data-id="' + escapeHtml(col.slug) +
+        '" data-name="' + escapeHtml(col.name) + '" data-note="' + escapeHtml(catName) + '">' +
+        "Add to quote</button>" +
       "</article>";
   }
-
-  function renderHome() {
-    var cats = CATEGORIES.map(function (c) {
-      return '<a class="cat-card" href="#/shop?cat=' + c.id + '">' +
-        '<div class="e">' + c.emoji + "</div>" +
-        "<h3>" + escapeHtml(c.name) + "</h3>" +
+  function categoryCard(c) {
+    return '<a class="cat-card" href="#/shop?cat=' + c.id + '">' +
+      '<div class="cat-media"><img src="' + c.image + '" alt="' + escapeHtml(c.alt) +
+        '" loading="lazy" width="640" height="420"></div>' +
+      '<div class="cat-card-body"><h3>' + escapeHtml(c.name) + "</h3>" +
         "<p>" + escapeHtml(c.blurb) + "</p>" +
-        '<span class="more">Browse ' + escapeHtml(c.name) + " →</span>" +
+        '<span class="more">Browse ' + escapeHtml(c.name) + " &rarr;</span></div>" +
       "</a>";
+  }
+  function crumbs(trail) {
+    return '<div class="container"><nav class="crumbs" aria-label="Breadcrumb">' +
+      trail.map(function (t, i) {
+        return (t.href ? '<a href="' + t.href + '">' + escapeHtml(t.label) + "</a>" : escapeHtml(t.label)) +
+               (i < trail.length - 1 ? " / " : "");
+      }).join("") + "</nav></div>";
+  }
+
+  /* ------------------------------------------------------------------ views */
+  function renderHome() {
+    var values = VALUES.map(function (v) {
+      return '<div class="item"><div class="e" aria-hidden="true">' + v.icon + "</div>" +
+        '<div><div class="t">' + escapeHtml(v.title) + '</div><div class="d">' + escapeHtml(v.text) + "</div></div></div>";
     }).join("");
 
-    var featured = PRODUCTS.filter(function (p) { return p.popular; }).slice(0, 8).map(productCard).join("");
+    var cats = CATEGORIES.map(categoryCard).join("");
 
-    var trust = COMPANY.trust.map(function (t) {
-      return '<div class="item"><div class="e">' + t.icon + "</div><div><div class=\"t\">" +
-        escapeHtml(t.title) + '</div><div class="d">' + escapeHtml(t.text) + "</div></div></div>";
+    var rentals = RENTALS.slice(0, 6).map(function (r) {
+      return '<li>' + escapeHtml(r.name) + "</li>";
     }).join("");
 
-    var tts = TESTIMONIALS.map(function (t) {
-      return '<div class="tcard"><div class="stars">' + stars(t.stars) + '</div>' +
-        '<p class="q">“' + escapeHtml(t.quote) + '”</p>' +
-        '<div class="who">' + escapeHtml(t.name) + '</div><div class="city">' + escapeHtml(t.city) + "</div></div>";
+    var funding = FUNDING.slice(0, 6).map(function (f) {
+      return '<li><strong>' + escapeHtml(f.name) + "</strong></li>";
     }).join("");
 
     return '' +
       '<section class="hero"><div class="container"><div class="hero-grid">' +
         "<div>" +
-          "<h1>Live <span>independently</span>, comfortably, at home.</h1>" +
-          '<p class="lead">' + escapeHtml(COMPANY.promise) + " Browse, compare and request a quote in minutes — buy or rent.</p>" +
+          '<p class="eyebrow">Mobility &amp; home healthcare · ' + escapeHtml(COMPANY.region) + "</p>" +
+          "<h1>Welcome to Help Mobility</h1>" +
+          '<p class="tagline">' + escapeHtml(COMPANY.tagline) + "</p>" +
+          '<p class="lead">' + escapeHtml(COMPANY.intro) + " " + escapeHtml(COMPANY.specialise) + "</p>" +
           '<div class="hero-cta">' +
-            '<a class="btn btn-primary btn-lg" href="#/shop">Shop products</a>' +
-            '<a class="btn btn-accent btn-lg" href="#/assessment">Book free assessment</a>' +
+            '<a class="btn btn-primary btn-lg" href="#/shop">Explore products</a>' +
+            '<a class="btn btn-accent btn-lg" href="#/quote">Request a quote</a>' +
           "</div>" +
-          '<div class="hero-points">' +
-            "<span>🍁 " + escapeHtml(COMPANY.foundedNote) + "</span>" +
-            "<span>🚚 " + escapeHtml(COMPANY.region) + "</span>" +
-          "</div>" +
+          '<p class="hero-phone">Questions? Call <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a> — 7 days a week.</p>" +
         "</div>" +
-        '<div class="hero-art"><div class="quote-card">' +
-          '<div class="big">“They gave me my home back.”</div>' +
-          '<p style="margin:.6rem 0 0;color:#eaffff">Free in-home assessment, flexible buy or rent, and certified installation across the GTA.</p>' +
-          '<div class="hero-mini">' +
-            '<div class="tile"><span class="e">♿</span><span>Wheelchairs &amp; scooters</span></div>' +
-            '<div class="tile"><span class="e">🛗</span><span>Stairlifts &amp; ramps</span></div>' +
-            '<div class="tile"><span class="e">🚿</span><span>Bathroom safety</span></div>' +
-            '<div class="tile"><span class="e">🛏️</span><span>Homecare beds</span></div>' +
-          "</div>" +
-        "</div></div>" +
+        '<div class="hero-art">' +
+          '<img src="assets/img/mobility.jpg" alt="A person staying active and independent with mobility support" width="560" height="747" fetchpriority="high">' +
+        "</div>" +
       "</div></div></section>" +
 
-      '<div class="container"><div class="trust">' + trust + "</div></div>" +
+      '<div class="container"><div class="value-strip">' + values + "</div></div>" +
 
       '<section class="section"><div class="container">' +
-        '<div class="section-head"><div><h2>Shop by need</h2><p>Everything for comfort, safety and independence at home.</p></div>' +
+        '<div class="section-head"><div><h2>Shop by need</h2><p>Four ways we help you stay comfortable, safe and independent at home.</p></div>' +
         '<a class="btn btn-ghost" href="#/shop">View all products</a></div>' +
         '<div class="cat-grid">' + cats + "</div>" +
       "</div></section>" +
 
-      '<section class="section alt"><div class="container">' +
-        '<div class="section-head"><div><h2>Most requested</h2><p>Popular picks our GTA customers choose most.</p></div>' +
-        '<a class="btn btn-ghost" href="#/shop?sort=popular">See more →</a></div>' +
-        '<div class="product-grid">' + featured + "</div>" +
-      "</div></section>" +
+      '<section class="section alt"><div class="container"><div class="mission">' +
+        "<h2>Empowering independence through smart solutions</h2>" +
+        '<p class="lead">' + escapeHtml(COMPANY.mission) + "</p>" +
+      "</div></div></section>" +
 
-      '<section class="section"><div class="container">' +
-        '<div class="section-head"><div><h2>Families trust Help Mobility</h2><p>Real outcomes across the Greater Toronto Area.</p></div></div>' +
-        '<div class="tgrid">' + tts + "</div>" +
-      "</div></section>" +
+      '<section class="section"><div class="container"><div class="split">' +
+        '<div class="split-card">' +
+          "<h2>Rent instead of buy</h2>" +
+          "<p>Short-term need, recovery or just trying before you buy? Rent quality equipment by the month.</p>" +
+          '<ul class="ticks">' + rentals + "</ul>" +
+          '<a class="btn btn-primary" href="#/rentals">See rental options</a>' +
+        "</div>" +
+        '<div class="split-card accent">' +
+          "<h2>Funding &amp; assistance</h2>" +
+          "<p>You may not have to pay full price. We help you access the programs you qualify for.</p>" +
+          '<ul class="ticks">' + funding + "</ul>" +
+          '<a class="btn btn-primary" href="#/funding">Explore funding</a>' +
+        "</div>" +
+      "</div></div></section>" +
 
-      '<section class="section"><div class="container"><div class="cta-band">' +
+      '<section class="section alt"><div class="container"><div class="cta-band">' +
         "<h2>Not sure what you need?</h2>" +
-        "<p>Book a free, no-pressure in-home assessment. We measure your space, recommend the right solution and give you a clear quote — buy or rent.</p>" +
+        "<p>Tell us about your situation and a Help Mobility specialist will recommend the right solution and prepare a clear quote — buy or rent.</p>" +
         '<div class="cta-actions">' +
-          '<a class="btn btn-accent btn-lg" href="#/assessment">Book free assessment</a>' +
-          '<a class="btn btn-outline btn-lg" href="' + COMPANY.phoneHref + '">📞 Call ' + escapeHtml(COMPANY.phone) + "</a>" +
+          '<a class="btn btn-accent btn-lg" href="#/quote">Request a quote</a>' +
+          phoneCta("btn-outline btn-lg") +
         "</div>" +
       "</div></div></section>";
   }
 
   function renderShop(params) {
-    var q = (params.q || "").trim().toLowerCase();
-    var cat = params.cat || "all";
-    var mode = params.mode || "all";     // all | buy | rent
-    var sort = params.sort || "featured";
+    var q = (params.q || "").trim();
+    var catId = params.cat || "";
 
-    var list = PRODUCTS.slice();
-    if (cat !== "all") list = list.filter(function (p) { return p.cat === cat; });
-    if (mode === "rent") list = list.filter(function (p) { return !!p.rent; });
-    if (q) list = list.filter(function (p) {
-      return (p.name + " " + p.blurb + " " + catName(p.cat) + " " + p.features.join(" ")).toLowerCase().indexOf(q) !== -1;
-    });
-
-    if (sort === "price-asc") list.sort(function (a, b) { return a.price - b.price; });
-    else if (sort === "price-desc") list.sort(function (a, b) { return b.price - a.price; });
-    else if (sort === "rating") list.sort(function (a, b) { return b.rating - a.rating; });
-    else if (sort === "popular") list.sort(function (a, b) { return (b.popular ? 1 : 0) - (a.popular ? 1 : 0); });
-
-    function catChip(id, label) {
-      return '<button class="chip' + (cat === id ? " active" : "") + '" data-action="filter-cat" data-cat="' + id + '">' + escapeHtml(label) + "</button>";
+    // chips
+    function chip(id, label) {
+      var active = (id === "" && !catId && !q) || id === catId;
+      return '<a class="chip' + (active ? " active" : "") + '" href="#/shop' + (id ? "?cat=" + id : "") + '">' + escapeHtml(label) + "</a>";
     }
-    var chips = catChip("all", "All") + CATEGORIES.map(function (c) { return catChip(c.id, c.emoji + " " + c.name); }).join("");
+    var chips = chip("", "All") + CATEGORIES.map(function (c) { return chip(c.id, c.name); }).join("");
 
-    var title = cat === "all" ? "All products" : catName(cat);
-    var grid = list.length
-      ? '<div class="product-grid">' + list.map(productCard).join("") + "</div>"
-      : '<div class="empty-state"><div class="e">🔎</div><h3>No matching products</h3>' +
-        '<p class="muted">Try a different search or category.</p>' +
-        '<a class="btn btn-primary" href="#/shop">Show all products</a></div>';
-
-    return '' +
-      '<div class="container"><div class="crumbs"><a href="#/">Home</a> / Shop' + (cat !== "all" ? " / " + escapeHtml(title) : "") + "</div></div>" +
-      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
-        '<div class="section-head"><div><h2>' + escapeHtml(title) + "</h2>" +
-          '<p class="result-count">' + list.length + " product" + (list.length === 1 ? "" : "s") +
-          (q ? ' for “' + escapeHtml(q) + "”" : "") + "</p></div></div>" +
-
-        '<div class="toolbar">' +
-          '<div class="chips">' + chips + "</div>" +
-          '<div class="spacer"></div>' +
-          '<label for="f-mode">Show</label>' +
-          '<select id="f-mode" data-action="filter-mode">' +
-            '<option value="all"' + (mode === "all" ? " selected" : "") + ">Buy &amp; rent</option>" +
-            '<option value="rent"' + (mode === "rent" ? " selected" : "") + ">Rentals only</option>" +
-          "</select>" +
-          '<label for="f-sort">Sort</label>' +
-          '<select id="f-sort" data-action="filter-sort">' +
-            '<option value="featured"' + (sort === "featured" ? " selected" : "") + ">Featured</option>" +
-            '<option value="popular"' + (sort === "popular" ? " selected" : "") + ">Most popular</option>" +
-            '<option value="price-asc"' + (sort === "price-asc" ? " selected" : "") + ">Price: low to high</option>" +
-            '<option value="price-desc"' + (sort === "price-desc" ? " selected" : "") + ">Price: high to low</option>" +
-            '<option value="rating"' + (sort === "rating" ? " selected" : "") + ">Top rated</option>" +
-          "</select>" +
+    var body;
+    if (q) {
+      var ql = q.toLowerCase();
+      var matches = ALL_COLLECTIONS.filter(function (col) {
+        return (col.name + " " + col.catName).toLowerCase().indexOf(ql) !== -1;
+      });
+      body = '<div class="section-head"><div><h2>Search results</h2>' +
+        '<p class="result-count">' + matches.length + " result" + (matches.length === 1 ? "" : "s") +
+        ' for &ldquo;' + escapeHtml(q) + "&rdquo;</p></div></div>" +
+        (matches.length
+          ? '<div class="col-grid">' + matches.map(function (m) { return collectionCard(m, m.cat, m.catName); }).join("") + "</div>"
+          : '<div class="empty-state"><div class="e" aria-hidden="true">🔎</div><h3>No matching products</h3>' +
+            '<p class="muted">Try another search, or browse all categories.</p>' +
+            '<a class="btn btn-primary" href="#/shop">Browse all products</a></div>');
+    } else if (catId && catById(catId)) {
+      var c = catById(catId);
+      body =
+        '<div class="cat-hero cat-' + c.id + '">' +
+          '<img src="' + c.image + '" alt="' + escapeHtml(c.alt) + '" loading="lazy" width="640" height="420">' +
+          "<div><h2>" + escapeHtml(c.name) + "</h2><p>" + escapeHtml(c.blurb) + "</p>" +
+          '<a class="btn btn-accent" href="#/quote">Request a quote</a></div>' +
         "</div>" +
-        grid +
+        '<div class="col-grid">' + c.collections.map(function (col) { return collectionCard(col, c.id, c.name); }).join("") + "</div>";
+    } else {
+      body = CATEGORIES.map(function (c) {
+        return '<div class="cat-block"><div class="section-head"><div><h2 id="cat-' + c.id + '">' + escapeHtml(c.name) + "</h2>" +
+          "<p>" + escapeHtml(c.blurb) + "</p></div>" +
+          '<a class="btn btn-ghost btn-sm" href="#/shop?cat=' + c.id + '">View ' + escapeHtml(c.name) + "</a></div>" +
+          '<div class="col-grid">' + c.collections.map(function (col) { return collectionCard(col, c.id, c.name); }).join("") + "</div></div>";
+      }).join("");
+    }
+
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Products" }]) +
+      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
+        '<div class="chips" role="navigation" aria-label="Product categories">' + chips + "</div>" +
+        body +
       "</div></section>";
   }
 
-  // local UI state for the product detail buy box
-  var pd = { id: null, mode: "buy", qty: 1 };
+  function renderRentals() {
+    var cards = RENTALS.map(function (r) {
+      return '<article class="col-card cat-mobility">' +
+        '<div class="col-body"><span class="col-tag">Rental</span><h3>' + escapeHtml(r.name) + "</h3></div>" +
+        '<button class="btn btn-ghost btn-sm" data-action="add" data-id="' + escapeHtml(r.slug) +
+          '" data-name="' + escapeHtml(r.name) + '" data-note="Rental">Add to quote</button>' +
+        "</article>";
+    }).join("");
 
-  function pdBuyBox() {
-    var p = byId(pd.id); if (!p) return "";
-    var unit = pd.mode === "rent" && p.rent ? p.rent : p.price;
-    var suffix = pd.mode === "rent" ? "/mo" : "";
-    var toggle = p.rent
-      ? '<div class="mode-toggle" role="group" aria-label="Buy or rent">' +
-          '<button class="' + (pd.mode === "buy" ? "active" : "") + '" data-action="pd-mode" data-mode="buy">Buy</button>' +
-          '<button class="' + (pd.mode === "rent" ? "active" : "") + '" data-action="pd-mode" data-mode="rent">Rent / mo</button>' +
-        "</div>"
-      : "";
-    return '' +
-      '<div class="pd-price">' + (p.from && pd.mode === "buy" ? '<span class="from">from </span>' : "") + money(unit) + suffix + "</div>" +
-      toggle +
-      '<div class="pd-buy">' +
-        '<div class="qty" aria-label="Quantity">' +
-          '<button data-action="pd-qty" data-dir="-1" aria-label="Decrease quantity">−</button>' +
-          "<span>" + pd.qty + "</span>" +
-          '<button data-action="pd-qty" data-dir="1" aria-label="Increase quantity">+</button>' +
-        "</div>" +
-        '<button class="btn btn-primary btn-lg" data-action="pd-add">Add to quote</button>' +
-      "</div>";
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Rentals" }]) +
+      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
+        '<div class="section-head"><div><h1>Rent instead of buy</h1>' +
+        "<p>Flexible monthly rentals for recovery, short-term needs or trying before you buy — delivered across the GTA.</p></div></div>" +
+        '<div class="col-grid">' + cards + "</div>" +
+        '<div class="cta-band" style="margin-top:2rem"><h2>Ready to arrange a rental?</h2>' +
+        "<p>Add what you need to your quote and we’ll confirm availability, delivery and pricing.</p>" +
+        '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/quote">Request a quote</a>' + phoneCta("btn-outline btn-lg") + "</div></div>" +
+      "</div></section>";
   }
 
-  function renderProduct(id) {
-    var p = byId(id);
-    if (!p) return '<div class="container"><div class="empty-state"><div class="e">🤷</div><h3>Product not found</h3><a class="btn btn-primary" href="#/shop">Back to shop</a></div></div>';
-    pd = { id: id, mode: "buy", qty: 1 };
+  function renderRepairs() {
+    var equip = REPAIRS.equipment.map(function (e) { return "<li>" + escapeHtml(e) + "</li>"; }).join("");
+    var services = REPAIRS.services.map(function (s) {
+      return '<div class="feature"><h3>' + escapeHtml(s.title) + "</h3><p>" + escapeHtml(s.text) + "</p></div>";
+    }).join("");
 
-    var feats = p.features.map(function (f) { return "<li>" + escapeHtml(f) + "</li>"; }).join("");
-    var related = PRODUCTS.filter(function (x) { return x.cat === p.cat && x.id !== p.id; }).slice(0, 4).map(productCard).join("");
-
-    return '' +
-      '<div class="container"><div class="crumbs"><a href="#/">Home</a> / <a href="#/shop?cat=' + p.cat + '">' + escapeHtml(catName(p.cat)) + "</a> / " + escapeHtml(p.name) + "</div></div>" +
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Repairs & Maintenance" }]) +
       '<section class="section" style="padding-top:1.4rem"><div class="container">' +
-        '<div class="pd-grid">' +
-          '<div class="pd-media cat-' + p.cat + '" aria-hidden="true">' + p.emoji + "</div>" +
-          '<div class="pd-info">' +
-            '<div class="cat-tag">' + escapeHtml(catName(p.cat)) + "</div>" +
-            "<h1>" + escapeHtml(p.name) + "</h1>" +
-            '<div class="stars">' + stars(p.rating) + ' <small>' + p.rating.toFixed(1) + " · " + p.reviews + " reviews</small></div>" +
-            "<p>" + escapeHtml(p.blurb) + "</p>" +
-            '<div id="pd-buybox">' + pdBuyBox() + "</div>" +
-            "<ul class=\"pd-features\">" + feats + "</ul>" +
-            '<div class="assess-note">🏠 <strong>Free in-home assessment included.</strong> Our GTA team confirms the right fit, handles delivery &amp; installation, and your quote covers everything — no surprises.</div>' +
-          "</div>" +
-        "</div>" +
-        (related ? '<div class="section-head" style="margin-top:2.4rem"><h2>You may also like</h2></div><div class="product-grid">' + related + "</div>" : "") +
-      "</div></section>" +
-      // sticky mobile bar
-      '<div class="mobilebar"><span class="price">' + (p.rent ? money(p.rent) + "/mo or " : "") + priceLabel(p) +
-        '</span><button class="btn btn-primary" data-action="pd-add">Add to quote</button></div>';
+        "<h1>" + escapeHtml(REPAIRS.heading) + "</h1>" +
+        '<p class="lead">' + escapeHtml(REPAIRS.intro) + "</p>" +
+        '<div class="assess-note">We service <strong>' + REPAIRS.equipment.join(", ").toLowerCase() +
+          "</strong> and more. Not sure if we cover your device? Just ask.</div>" +
+        '<div class="feature-grid">' + services + "</div>" +
+        '<div class="cta-band" style="margin-top:2rem"><h2>Need a repair?</h2>' +
+        "<p>Call us 7 days a week and we’ll get you booked in — with loaner equipment available while yours is serviced.</p>" +
+        '<div class="cta-actions">' + phoneCta("btn-accent btn-lg") +
+          '<a class="btn btn-outline btn-lg" href="#/contact">Send a message</a></div></div>' +
+      "</div></section>";
+  }
+
+  function renderIndustries() {
+    var segs = INDUSTRIES.segments.map(function (s) {
+      return '<div class="feature"><h3>' + escapeHtml(s.name) + "</h3><p>" + escapeHtml(s.text) + "</p></div>";
+    }).join("");
+
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Industries We Serve" }]) +
+      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
+        "<h1>" + escapeHtml(INDUSTRIES.heading) + "</h1>" +
+        '<p class="lead">' + escapeHtml(INDUSTRIES.intro) + "</p>" +
+        '<div class="feature-grid">' + segs + "</div>" +
+        '<div class="cta-band" style="margin-top:2rem"><h2>Work with Help Mobility</h2>' +
+        "<p>Partner with us for reliable equipment, same-day delivery and ongoing maintenance for the people in your care.</p>" +
+        '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/contact">Become a partner</a>' + phoneCta("btn-outline btn-lg") + "</div></div>" +
+      "</div></section>";
+  }
+
+  function renderFunding() {
+    var cards = FUNDING.map(function (f) {
+      return '<div class="feature"><h3>' + escapeHtml(f.name) + "</h3><p>" + escapeHtml(f.text) + "</p></div>";
+    }).join("");
+
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Funding & Assistance" }]) +
+      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
+        "<h1>Funding &amp; assistance programs</h1>" +
+        '<p class="lead">You may not have to pay full price for the equipment you need. Help Mobility helps you understand and apply for the programs you qualify for.</p>' +
+        '<div class="feature-grid">' + cards + "</div>" +
+        '<p class="fine muted" style="margin-top:1rem">Eligibility and coverage are set by each program. We’ll help you find the right fit for your situation.</p>' +
+        '<div class="cta-band" style="margin-top:1.6rem"><h2>Find out what you qualify for</h2>' +
+        "<p>Tell us a little about your needs and we’ll guide you through your funding options.</p>" +
+        '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/contact">Ask about funding</a>' + phoneCta("btn-outline btn-lg") + "</div></div>" +
+      "</div></section>";
+  }
+
+  function field(name, label, type, required, autocomplete) {
+    return '<div class="field"><label for="f-' + name + '">' + escapeHtml(label) +
+      (required ? ' <span class="req" aria-hidden="true">*</span>' : "") + "</label>" +
+      "<" + (type === "textarea" ? 'textarea id="f-' + name + '" name="' + name + '" rows="3"' :
+             'input id="f-' + name + '" name="' + name + '" type="' + type + '"') +
+      (required ? " required" : "") + ' autocomplete="' + (autocomplete || "on") + '">' +
+      (type === "textarea" ? "</textarea>" : "") +
+      '<span class="error-msg" role="alert">Please enter your ' + escapeHtml(label.toLowerCase()) + ".</span></div>";
   }
 
   function requestForm(type) {
-    // type: "quote" (has cart items) or "assessment"
-    var heading = type === "assessment" ? "Book your free in-home assessment" : "Request your free quote";
-    var sub = type === "assessment"
-      ? "Tell us a little about your needs and we’ll arrange a no-cost visit across the GTA."
-      : "Send your list and we’ll reply with a personalized quote — usually the same day.";
+    // type: "quote" (carries the interest list) or "contact" (general enquiry)
+    var heading = type === "contact" ? "Send us a message" : "Request your quote";
+    var sub = type === "contact"
+      ? "Questions about products, rentals, repairs or funding? We’ll get back to you, usually the same day."
+      : "Send your list and we’ll reply with a personalized quote — buy or rent. No obligation.";
     return '' +
       '<form id="request-form" novalidate data-type="' + type + '">' +
-        "<h3>" + heading + "</h3>" +
+        "<h2>" + heading + "</h2>" +
         '<p class="muted" style="margin-top:-.3rem">' + sub + "</p>" +
         '<div class="form-grid">' +
-          field("name", "Full name", "text", true) +
-          field("phone", "Phone", "tel", true) +
-          field("email", "Email", "email", true) +
-          field("postal", "Postal code", "text", false) +
+          field("name", "Full name", "text", true, "name") +
+          field("phone", "Phone", "tel", true, "tel") +
+          field("email", "Email", "email", true, "email") +
+          field("postal", "Postal code", "text", false, "postal-code") +
           '<div class="field"><label for="f-interest">I’m interested in</label>' +
             '<select id="f-interest" name="interest">' +
-              "<option>Buying</option><option>Renting</option><option selected>Not sure — please advise</option>" +
+              "<option>Buying</option><option>Renting</option><option>Repair / maintenance</option>" +
+              "<option>Funding &amp; assistance</option><option selected>Not sure — please advise</option>" +
             "</select></div>" +
           '<div class="field"><label for="f-contact">Best way to reach me</label>' +
             '<select id="f-contact" name="contact"><option>Phone call</option><option>Text message</option><option>Email</option></select></div>' +
-          '<div class="field full"><label for="f-msg">Anything we should know? <span class="muted">(optional)</span></label>' +
-            '<textarea id="f-msg" name="message" rows="3" placeholder="e.g. stairs have a turn, needed within 2 weeks, mobility needs…"></textarea></div>' +
+          '<div class="field full"><label for="f-msg">How can we help? <span class="muted">(optional)</span></label>' +
+            '<textarea id="f-msg" name="message" rows="3" placeholder="e.g. stairs have a turn, needed within 2 weeks, ADP funding question…"></textarea></div>' +
         "</div>" +
-        '<div style="margin-top:1.2rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center">' +
-          '<button type="submit" class="btn btn-primary btn-lg">' + (type === "assessment" ? "Book my assessment" : "Send my quote request") + "</button>" +
-          '<a class="btn btn-ghost" href="' + COMPANY.phoneHref + '">📞 Prefer to call? ' + escapeHtml(COMPANY.phone) + "</a>" +
+        '<div class="form-actions">' +
+          '<button type="submit" class="btn btn-primary btn-lg">' + (type === "contact" ? "Send message" : "Send quote request") + "</button>" +
+          phoneCta("btn-ghost") +
         "</div>" +
-        '<p class="fine muted" style="margin-top:.8rem">We use your details only to prepare your quote and never share them. By submitting you agree to be contacted about your request.</p>' +
+        '<p class="fine muted" style="margin-top:.8rem">We use your details only to respond to your request and never share them. By submitting you agree to be contacted about your enquiry.</p>' +
       "</form>";
   }
-  function field(name, label, type, required) {
-    return '<div class="field"><label for="f-' + name + '">' + escapeHtml(label) +
-      (required ? ' <span class="req">*</span>' : "") + "</label>" +
-      '<input id="f-' + name + '" name="' + name + '" type="' + type + '"' + (required ? " required" : "") +
-      ' autocomplete="' + (name === "name" ? "name" : name === "email" ? "email" : name === "phone" ? "tel" : name === "postal" ? "postal-code" : "on") + '">' +
-      '<span class="error-msg">Please enter your ' + escapeHtml(label.toLowerCase()) + ".</span></div>";
-  }
 
-  function renderCart() {
-    if (!cart.length) {
-      return '<div class="container"><section class="section"><div class="empty-state">' +
-        '<div class="e">🧾</div><h2>Your quote list is empty</h2>' +
-        '<p class="muted">Add products you’re interested in — buying or renting — and we’ll send a personalized quote.</p>' +
-        '<div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">' +
-          '<a class="btn btn-primary btn-lg" href="#/shop">Browse products</a>' +
-          '<a class="btn btn-accent btn-lg" href="#/assessment">Book free assessment</a>' +
-        "</div></div></section></div>";
+  function renderQuote() {
+    var list;
+    if (!quote.length) {
+      list = '<div class="empty-state"><div class="e" aria-hidden="true">📝</div><h2>Your quote list is empty</h2>' +
+        '<p class="muted">Browse the catalogue and add anything you’re interested in — buying or renting — then send it to us for a personalized quote.</p>' +
+        '<a class="btn btn-primary btn-lg" href="#/shop">Browse products</a></div>';
+      return crumbs([{ label: "Home", href: "#/" }, { label: "Quote request" }]) +
+        '<section class="section" style="padding-top:1.4rem"><div class="container">' + list + "</div></section>";
     }
-
-    var items = cart.map(function (l) {
-      var p = byId(l.id); if (!p) return "";
-      var unit = l.mode === "rent" && p.rent ? p.rent : p.price;
-      var modeLabel = l.mode === "rent" ? "Rental · " + money(p.rent) + "/mo" : "Purchase · " + money(p.price);
-      return '<div class="cart-item">' +
-        '<div class="ci-thumb cat-' + p.cat + '">' + p.emoji + "</div>" +
-        "<div><div class=\"ci-name\">" + escapeHtml(p.name) + "</div>" +
-          '<div class="ci-mode">' + modeLabel + "</div>" +
-          '<button class="link-danger" data-action="remove" data-id="' + p.id + '" data-mode="' + l.mode + '">Remove</button></div>' +
-        '<div class="ci-right">' +
-          '<div class="qty"><button data-action="line-qty" data-id="' + p.id + '" data-mode="' + l.mode + '" data-dir="-1" aria-label="Decrease">−</button>' +
-          "<span>" + l.qty + "</span>" +
-          '<button data-action="line-qty" data-id="' + p.id + '" data-mode="' + l.mode + '" data-dir="1" aria-label="Increase">+</button></div>' +
-          '<div class="price">' + money(unit * l.qty) + (l.mode === "rent" ? "/mo" : "") + "</div>" +
-        "</div></div>";
+    var items = quote.map(function (i) {
+      return '<div class="q-item"><div><div class="q-name">' + escapeHtml(i.name) + "</div>" +
+        (i.note ? '<div class="q-note">' + escapeHtml(i.note) + "</div>" : "") + "</div>" +
+        '<button class="link-danger" data-action="remove" data-id="' + escapeHtml(i.id) +
+        '" data-note="' + escapeHtml(i.note) + '">Remove</button></div>';
     }).join("");
 
-    var t = cartTotals();
-    var summaryLines = "";
-    if (t.buyCount) summaryLines += '<div class="line"><span>Purchase (' + t.buyCount + " item" + (t.buyCount === 1 ? "" : "s") + ")</span><span>" + money(t.buy) + "</span></div>";
-    if (t.rentCount) summaryLines += '<div class="line"><span>Rental (' + t.rentCount + " item" + (t.rentCount === 1 ? "" : "s") + ")</span><span>" + money(t.rent) + "/mo</span></div>";
-
-    return '' +
-      '<div class="container"><div class="crumbs"><a href="#/">Home</a> / Your quote list</div></div>' +
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Quote request" }]) +
       '<section class="section" style="padding-top:1.4rem"><div class="container">' +
-        '<div class="section-head"><div><h2>Your quote list</h2><p>Review items, then request your free personalized quote.</p></div>' +
-          '<button class="btn btn-ghost btn-sm" data-action="clear-cart">Clear list</button></div>' +
-        '<div class="cart-grid">' +
-          '<div><div class="cart-list">' + items + "</div></div>" +
-          '<aside class="summary"><h3>Estimate</h3>' + summaryLines +
-            '<div class="line total"><span>Items</span><span>' + cartCount() + "</span></div>" +
-            '<p class="fine">Indicative pricing only. Your personalized quote may include delivery, installation, applicable taxes and any government rebates you qualify for.</p>' +
+        '<div class="section-head"><div><h1>Your quote request</h1><p>Review your list, then send it for a personalized quote.</p></div>' +
+        '<button class="btn btn-ghost btn-sm" data-action="clear-quote">Clear list</button></div>' +
+        '<div class="quote-grid">' +
+          '<aside class="q-list"><h2>' + quote.length + " item" + (quote.length === 1 ? "" : "s") + "</h2>" + items + "</aside>" +
+          '<div class="q-form">' + requestForm("quote") + "</div>" +
+        "</div>" +
+      "</div></section>";
+  }
+
+  function renderContact() {
+    return crumbs([{ label: "Home", href: "#/" }, { label: "Contact" }]) +
+      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
+        '<div class="quote-grid">' +
+          '<div class="q-form">' + requestForm("contact") + "</div>" +
+          '<aside class="contact-aside">' +
+            "<h2>Talk to us</h2>" +
+            '<p class="contact-line"><span aria-hidden="true">📞</span> <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a></p>" +
+            '<p class="muted">Available 7 days a week.</p>' +
+            '<p class="contact-line"><span aria-hidden="true">📍</span> ' + escapeHtml(COMPANY.region) + "</p>" +
+            '<div class="assess-note" style="margin-top:1.2rem">Prefer to browse first? <a href="#/shop">Explore our products</a> and add items to your quote as you go.</div>' +
           "</aside>" +
         "</div>" +
-        '<div class="cart-grid" style="margin-top:1.6rem"><div class="summary" style="position:static">' + requestForm("quote") + "</div><div></div></div>" +
       "</div></section>";
   }
 
-  function renderAssessment() {
-    return '<div class="container"><div class="crumbs"><a href="#/">Home</a> / Free assessment</div></div>' +
-      '<section class="section" style="padding-top:1.4rem"><div class="container">' +
-        '<div class="cart-grid"><div class="summary" style="position:static">' + requestForm("assessment") + "</div>" +
-        '<aside class="summary"><h3>What to expect</h3>' +
-          '<div class="line"><span>1.</span><span>A friendly call to understand your needs</span></div>' +
-          '<div class="line"><span>2.</span><span>A free home visit & measurements</span></div>' +
-          '<div class="line"><span>3.</span><span>A clear written quote — buy or rent</span></div>' +
-          '<div class="line"><span>4.</span><span>Professional delivery & installation</span></div>' +
-          '<p class="fine">No cost, no obligation. Serving the Greater Toronto Area.</p>' +
-        "</aside></div>" +
-      "</div></section>";
-  }
-
-  function renderConfirm(ref) {
+  function renderSent(ref) {
     var lead = getLead(ref);
     var recap = "";
     if (lead && lead.items && lead.items.length) {
       recap = '<div class="quote-recap"><h3>Your list</h3>' + lead.items.map(function (it) {
-        return '<div class="line"><span>' + escapeHtml(it.name) + " × " + it.qty + (it.mode === "rent" ? " (rental)" : "") +
-          "</span><span>" + money(it.lineTotal) + (it.mode === "rent" ? "/mo" : "") + "</span></div>";
+        return '<div class="line"><span>' + escapeHtml(it.name) + "</span><span class=\"muted\">" + escapeHtml(it.note || "") + "</span></div>";
       }).join("") + "</div>";
     }
-    var mailto = lead ? buildMailto(lead) : "#";
-    var headline = lead && lead.type === "assessment" ? "Your assessment request is in!" : "Your quote request is in!";
+    var firstName = lead && lead.customer && lead.customer.name ? lead.customer.name.split(" ")[0] : "";
+    var headline = lead && lead.type === "contact" ? "Your message is on its way!" : "Your quote request is in!";
+
     return '<div class="container"><section class="section"><div class="confirm">' +
-      '<div class="check">✓</div>' +
-      "<h2>" + headline + "</h2>" +
-      "<p>Thank you" + (lead ? ", " + escapeHtml(lead.customer.name.split(" ")[0]) : "") +
-        "! A Help Mobility advisor will reach out " +
-        (lead ? "via " + escapeHtml((lead.customer.contact || "phone").toLowerCase()) : "shortly") + ", usually the same day.</p>" +
+      '<div class="check" aria-hidden="true">✓</div>' +
+      "<h1>" + escapeHtml(headline) + "</h1>" +
+      "<p>Thank you" + (firstName ? ", " + escapeHtml(firstName) : "") +
+        "! A Help Mobility specialist will reach out " +
+        (lead && lead.customer ? "via " + escapeHtml((lead.customer.contact || "phone").toLowerCase()) : "shortly") +
+        ", usually the same day.</p>" +
       '<div class="ref-box">Reference: ' + escapeHtml(ref || "—") + "</div>" +
       recap +
-      '<div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem">' +
+      '<div class="confirm-actions">' +
         '<a class="btn btn-primary" href="#/shop">Continue browsing</a>' +
-        '<a class="btn btn-ghost" href="' + mailto + '">✉️ Email a copy to us</a>' +
-        '<a class="btn btn-ghost" href="' + COMPANY.phoneHref + '">📞 ' + escapeHtml(COMPANY.phone) + "</a>" +
+        phoneCta("btn-ghost") +
       "</div>" +
       '<p class="fine muted" style="margin-top:1rem">This demo stores your request in your browser. Connect a form endpoint or email service to receive leads automatically — see the project README.</p>' +
     "</div></section></div>";
   }
 
-  function buildMailto(lead) {
-    var lines = [];
-    lines.push("New " + (lead.type === "assessment" ? "assessment" : "quote") + " request — " + lead.ref);
-    lines.push("");
-    lines.push("Name: " + lead.customer.name);
-    lines.push("Phone: " + lead.customer.phone);
-    lines.push("Email: " + lead.customer.email);
-    if (lead.customer.postal) lines.push("Postal: " + lead.customer.postal);
-    lines.push("Interested in: " + lead.customer.interest);
-    lines.push("Preferred contact: " + lead.customer.contact);
-    if (lead.customer.message) { lines.push(""); lines.push("Message: " + lead.customer.message); }
-    if (lead.items && lead.items.length) {
-      lines.push(""); lines.push("Items:");
-      lead.items.forEach(function (it) {
-        lines.push("- " + it.name + " x" + it.qty + (it.mode === "rent" ? " (rental/mo)" : "") + " — " + money(it.lineTotal) + (it.mode === "rent" ? "/mo" : ""));
-      });
-    }
-    return "mailto:" + COMPANY.email + "?subject=" + encodeURIComponent("Quote request " + lead.ref) +
-      "&body=" + encodeURIComponent(lines.join("\n"));
-  }
-
   /* ------------------------------------------------------------------ render */
+  var ROUTES = {
+    "/": { fn: renderHome, title: "Help Mobility — Mobility & Home Healthcare (GTA)", nav: "home" },
+    "/shop": { fn: function (p) { return renderShop(p); }, title: "Products · Help Mobility", nav: "shop" },
+    "/rentals": { fn: renderRentals, title: "Rentals · Help Mobility", nav: "rentals" },
+    "/repairs": { fn: renderRepairs, title: "Repairs & Maintenance · Help Mobility", nav: "repairs" },
+    "/industries": { fn: renderIndustries, title: "Industries We Serve · Help Mobility", nav: "industries" },
+    "/funding": { fn: renderFunding, title: "Funding & Assistance · Help Mobility", nav: "funding" },
+    "/contact": { fn: renderContact, title: "Contact · Help Mobility", nav: "contact" },
+    "/quote": { fn: renderQuote, title: "Quote request · Help Mobility", nav: "quote" },
+    "/sent": { fn: function (p) { return renderSent(p.ref); }, title: "Request received · Help Mobility", nav: "" }
+  };
+
   function render() {
     var route = parseHash();
+    var def = ROUTES[route.path] || ROUTES["/"];
     var view = document.getElementById("view");
-    var html, title = "Help Mobility";
 
-    if (route.path === "/" ) { html = renderHome(); }
-    else if (route.path === "/shop") { html = renderShop(route.params); title = "Shop · Help Mobility"; }
-    else if (route.path.indexOf("/product/") === 0) {
-      var pid = route.path.slice("/product/".length);
-      html = renderProduct(pid);
-      var pp = byId(pid); title = (pp ? pp.name + " · " : "") + "Help Mobility";
-    }
-    else if (route.path === "/cart") { html = renderCart(); title = "Your quote list · Help Mobility"; }
-    else if (route.path === "/assessment") { html = renderAssessment(); title = "Free assessment · Help Mobility"; }
-    else if (route.path === "/quote-sent") { html = renderConfirm(route.params.ref); title = "Request received · Help Mobility"; }
-    else { html = renderHome(); }
-
-    view.innerHTML = html;
-    document.title = title;
+    view.innerHTML = def.fn(route.params);
+    document.title = def.title;
 
     // active nav
-    var navMap = { "/": "home", "/shop": "shop", "/assessment": "assessment", "/cart": "cart" };
-    var active = navMap[route.path] || (route.path.indexOf("/product/") === 0 ? "shop" : "");
+    var active = def.nav;
     Array.prototype.forEach.call(document.querySelectorAll("[data-nav]"), function (a) {
-      a.classList.toggle("active", a.getAttribute("data-nav") === active);
+      var on = a.getAttribute("data-nav") === active;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
 
-    // mobile sticky bar only on product pages
-    document.body.classList.toggle("has-mobilebar", route.path.indexOf("/product/") === 0);
-    // close mobile nav after navigation
     var nav = document.getElementById("mainnav"); if (nav) nav.classList.remove("open");
+    var toggle = document.querySelector('[data-action="nav-toggle"]');
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
 
-    updateCartBadge();
+    updateQuoteBadge();
     if (!route.params.keepscroll) window.scrollTo(0, 0);
+    // move focus to main heading for screen-reader users on route change
+    var h = view.querySelector("h1, h2"); if (h) { h.setAttribute("tabindex", "-1"); }
   }
 
   /* ------------------------------------------------------------------ events */
-  function refreshShopParam(key, value) {
-    var route = parseHash();
-    var params = route.params; params[key] = value;
-    var qs = Object.keys(params).filter(function (k) { return params[k] && params[k] !== "all" && k !== "keepscroll"; })
-      .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }).join("&");
-    go("/shop" + (qs ? "?" + qs : ""));
-  }
-
   document.addEventListener("click", function (e) {
     var el = e.target.closest("[data-action]");
     if (!el) return;
@@ -558,49 +504,28 @@
 
     if (action === "nav-toggle") {
       var nav = document.getElementById("mainnav");
-      if (nav) nav.classList.toggle("open");
-      el.setAttribute("aria-expanded", nav && nav.classList.contains("open") ? "true" : "false");
+      var open = nav && nav.classList.toggle("open");
+      el.setAttribute("aria-expanded", open ? "true" : "false");
       return;
     }
     if (action === "add") {
       e.preventDefault();
-      var p = byId(el.getAttribute("data-id"));
-      addToCart(el.getAttribute("data-id"), el.getAttribute("data-mode") || "buy", 1);
-      toast('<span class="e">✅</span><span>Added <strong>' + escapeHtml(p ? p.name : "item") + '</strong> to your quote. <a href="#/cart">View list →</a></span>');
+      var name = el.getAttribute("data-name");
+      var added = addItem(el.getAttribute("data-id"), name, el.getAttribute("data-note"));
+      if (added) {
+        toast('<span class="e" aria-hidden="true">✅</span><span>Added <strong>' + escapeHtml(name) +
+          '</strong> to your quote. <a href="#/quote">View list &rarr;</a></span>');
+      } else {
+        toast('<span class="e" aria-hidden="true">👍</span><span><strong>' + escapeHtml(name) + "</strong> is already on your list.</span>");
+      }
       return;
     }
-    if (action === "pd-mode") {
-      pd.mode = el.getAttribute("data-mode");
-      var box = document.getElementById("pd-buybox"); if (box) box.innerHTML = pdBuyBox();
+    if (action === "remove") {
+      removeItem(el.getAttribute("data-id"), el.getAttribute("data-note"));
+      render();
       return;
     }
-    if (action === "pd-qty") {
-      pd.qty = Math.max(1, pd.qty + parseInt(el.getAttribute("data-dir"), 10));
-      var box2 = document.getElementById("pd-buybox"); if (box2) box2.innerHTML = pdBuyBox();
-      return;
-    }
-    if (action === "pd-add") {
-      e.preventDefault();
-      var pp = byId(pd.id);
-      addToCart(pd.id, pd.mode, pd.qty);
-      toast('<span class="e">✅</span><span>Added <strong>' + escapeHtml(pp ? pp.name : "item") + '</strong>' +
-        (pd.mode === "rent" ? " (rental)" : "") + ' to your quote. <a href="#/cart">View list →</a></span>');
-      return;
-    }
-    if (action === "line-qty") {
-      var dir = parseInt(el.getAttribute("data-dir"), 10);
-      var line = findLine(el.getAttribute("data-id"), el.getAttribute("data-mode"));
-      if (line) { setQty(line.id, line.mode, line.qty + dir); render(); }
-      return;
-    }
-    if (action === "remove") { removeLine(el.getAttribute("data-id"), el.getAttribute("data-mode")); render(); return; }
-    if (action === "clear-cart") { clearCart(); render(); return; }
-    if (action === "filter-cat") { refreshShopParam("cat", el.getAttribute("data-cat")); return; }
-  });
-
-  document.addEventListener("change", function (e) {
-    if (e.target.id === "f-sort") refreshShopParam("sort", e.target.value);
-    else if (e.target.id === "f-mode") refreshShopParam("mode", e.target.value);
+    if (action === "clear-quote") { clearQuote(); render(); return; }
   });
 
   document.addEventListener("submit", function (e) {
@@ -608,7 +533,7 @@
       e.preventDefault();
       var input = e.target.querySelector("input[name=q]");
       go("/shop?q=" + encodeURIComponent((input.value || "").trim()));
-      input.blur();
+      if (input) input.blur();
       return;
     }
     if (e.target.id === "request-form") {
@@ -628,7 +553,7 @@
       if (!input) return;
       var fieldEl = input.closest(".field");
       if (fieldEl) fieldEl.classList.toggle("invalid", !ok);
-      if (!ok && valid) { input.focus(); }
+      if (!ok && valid) input.focus();
       if (!ok) valid = false;
     }
     var name = get("name"), phone = get("phone"), email = get("email");
@@ -636,12 +561,8 @@
     check("phone", phone.replace(/[^0-9]/g, "").length >= 10);
     check("name", name.length >= 2);
 
-    if (!valid) { toast('<span class="e">⚠️</span><span>Please fill in the highlighted fields.</span>'); return; }
+    if (!valid) { toast('<span class="e" aria-hidden="true">⚠️</span><span>Please complete the highlighted fields.</span>'); return; }
 
-    var items = cart.map(function (l) {
-      var p = byId(l.id); var unit = l.mode === "rent" && p.rent ? p.rent : p.price;
-      return { id: l.id, name: p.name, mode: l.mode, qty: l.qty, unit: unit, lineTotal: unit * l.qty };
-    });
     var lead = {
       ref: makeRef(),
       type: type,
@@ -650,8 +571,7 @@
         name: name, phone: phone, email: email,
         postal: get("postal"), interest: get("interest"), contact: get("contact"), message: get("message")
       },
-      items: type === "assessment" ? [] : items,
-      totals: cartTotals()
+      items: type === "quote" ? quote.slice() : []
     };
     saveLead(lead);
 
@@ -662,25 +582,23 @@
        or use Formspree / a Google Apps Script / your CRM webhook. See README.
     ----------------------------------------------------------------------- */
 
-    if (type !== "assessment") clearCart();
-    go("/quote-sent?ref=" + encodeURIComponent(lead.ref));
+    if (type === "quote") clearQuote();
+    go("/sent?ref=" + encodeURIComponent(lead.ref));
   }
 
   /* ------------------------------------------------------------------ boot */
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", function () {
-    // header year + phone
     var y = document.getElementById("year"); if (y) y.textContent = new Date().getFullYear();
-    updateCartBadge();
+    updateQuoteBadge();
     render();
 
-    // register service worker (PWA) — only over http(s), not file://
     if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
       navigator.serviceWorker.register("service-worker.js").catch(function () {});
     }
   });
 
-  // expose a tiny console helper for store owners to export captured leads
+  // console helper for store owners to export captured leads during testing
   window.HM.exportLeads = function () {
     try { return JSON.parse(localStorage.getItem(LEADS_KEY)) || []; } catch (e) { return []; }
   };
