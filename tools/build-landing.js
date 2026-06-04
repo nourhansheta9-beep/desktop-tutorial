@@ -24,8 +24,12 @@ const COMPANY = {
   tagline: "helping you get active, today!",
   phone: "905-615-9302",
   phoneHref: "tel:+19056159302",
+  email: "st@helpmobility.ca",
   region: "Greater Toronto Area",
   logo: "/assets/img/logo-dark.png",
+  address: { street: "4161 Sladeview Crescent, Unit 8", city: "Mississauga", region: "ON", postal: "L5L 5R3", country: "CA" },
+  addressText: "4161 Sladeview Crescent, Unit 8, Mississauga, ON L5L 5R3",
+  googleAdsId: "AW-740552287",
 };
 
 const CATEGORIES = [
@@ -61,7 +65,12 @@ function localBusinessLd() {
   return {
     "@context": "https://schema.org", "@type": "MedicalSupplyStore",
     name: COMPANY.name, slogan: COMPANY.tagline, url: ORIGIN + "/",
-    image: ORIGIN + COMPANY.logo, telephone: "+1-905-615-9302",
+    image: ORIGIN + COMPANY.logo, telephone: "+1-905-615-9302", email: COMPANY.email,
+    address: {
+      "@type": "PostalAddress", streetAddress: COMPANY.address.street,
+      addressLocality: COMPANY.address.city, addressRegion: COMPANY.address.region,
+      postalCode: COMPANY.address.postal, addressCountry: COMPANY.address.country,
+    },
     areaServed: { "@type": "Place", name: "Greater Toronto Area, Ontario, Canada" },
     makesOffer: ["Mobility equipment sales", "Mobility equipment rentals", "Equipment repairs & maintenance"]
       .map((n) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: n } })),
@@ -98,6 +107,9 @@ function head(opts) {
   <meta property="og:image" content="${ORIGIN}${COMPANY.logo}" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   ${opts.ld.map(jsonLd).join("\n  ")}
+  <!-- Google Ads (gtag) — remarketing + conversion tracking -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${COMPANY.googleAdsId}"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${COMPANY.googleAdsId}');</script>
 </head>`;
 }
 
@@ -159,7 +171,8 @@ function footer() {
   <footer class="site-footer"><div class="container"><div class="footer-grid">
     <div><span class="footer-brand-logo"><img src="${COMPANY.logo}" alt="Help Mobility" width="172" height="45" /></span>
       <p style="color:#cdd9e4;margin:.9rem 0">Helping you get active, today! Sales, rentals and repairs across the Greater Toronto Area.</p>
-      <p>📞 <a href="${COMPANY.phoneHref}" style="display:inline">${COMPANY.phone}</a></p></div>
+      <p>📞 <a href="${COMPANY.phoneHref}" style="display:inline">${COMPANY.phone}</a><br />✉️ <a href="mailto:${COMPANY.email}" style="display:inline">${COMPANY.email}</a></p>
+      <p style="color:#cdd9e4">📍 ${COMPANY.addressText}</p></div>
     <div><h4>Products</h4>${cats}</div>
     <div><h4>Areas we serve</h4>${cities}</div>
     <div><h4>Company</h4><a href="/#/repairs">Repairs &amp; Maintenance</a><a href="/#/funding">Funding &amp; Assistance</a><a href="/#/contact">Contact us</a><a href="${COMPANY.phoneHref}">Call ${COMPANY.phone}</a></div>

@@ -18,7 +18,7 @@ flagged, the evidence for it, and how the rebuild corrects it.
 | 2 | **No meta description on the homepage** — weak for SEO/social. | `<meta name="description">` absent in the homepage HTML | Added a descriptive `meta description`, `canonical`, `lang="en-CA"` and Open Graph tags. |
 | 3 | **Logo image has empty `alt=""`** — screen readers don’t announce the brand. | `class="header-logo__image" alt=""` in the live HTML | Logo now has descriptive alt text: *“Help Mobility — helping you get active, today!”* |
 | 4 | **Phone number is not clickable and only appears on one page.** `905‑615‑9302` shows on the Repairs page as plain text; the homepage and Contact page show no phone at all. | Number appears 3× only in the repairs page HTML; **zero `tel:` links** anywhere on the site | The real number is surfaced **site‑wide as a clickable `tel:` link** — top bar, header, footer, contact page and every call‑to‑action. |
-| 5 | **Contact page has no business details** — just a form. No phone, email, address or hours, which hurts trust and local SEO for a local GTA business. | Contact page content | Contact page now shows the real phone, availability (7 days a week) and service area, alongside the form. |
+| 5 | **Business details are hidden.** The Contact page is just a form; the real **address** (4161 Sladeview Crescent, Unit 8, Mississauga, ON L5L 5R3) and **email** (st@helpmobility.ca) appear **only in the privacy policy**, never on the contact page, footer or homepage — hurting trust and local SEO. | Privacy‑policy page vs. contact page | Address, email and phone now appear on the **contact page** (with a Google Maps link), in the **footer**, and in **LocalBusiness structured data**. |
 | 6 | **Images served with the wrong file extension** — files named `.webp` are actually JPEG/PNG (e.g. `Bath-Aids-…-1080x675_jpg.webp`, `M90-1080.webp`). | `file` reports JPEG/PNG data for `.webp` URLs | Re‑downloaded images are saved with their **true extensions** (`.jpg` / `.png`). |
 | 7 | **Oversized, unoptimised images.** A ~**4.4 MB** 1920×1080 PNG (`power-wheelchair`) was shipped on the homepage — slow on mobile and for the older audience the site targets. | Download size 4,404,014 bytes | That file is dropped; remaining images are lighter and all carry explicit `width`/`height` + `loading="lazy"` (hero uses `fetchpriority="high"`). |
 
@@ -52,5 +52,6 @@ The earlier build was a polished shell wrapped around **invented data**:
 - Downloaded the live homepage, sitemap, and the Contact / Repairs / Industries pages directly.
 - Extracted the exact logo colours from the logo PNG (green `#00780a`, blue `#004678`).
 - Confirmed the real phone number `905-615-9302` appears in the site HTML before relying on it.
+- Recovered the real **address** and **email** from the site's privacy policy, and the **Google Ads tag** (`AW-740552287`) from the page source — all now wired into the rebuild.
 - Ran a headless‑DOM smoke test of the rebuilt app (routing, search, category filter, add‑to‑quote, form submission) — all green, 0 runtime errors.
 - Captured desktop + mobile screenshots of the home, shop, category, repairs and contact pages.

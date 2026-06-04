@@ -44,16 +44,16 @@
     try { if (typeof window.gtag === "function") window.gtag("event", event, params || {}); } catch (e) {}
   }
   function initAnalytics() {
-    var id = CONFIG.gaId;
-    if (!id || location.protocol.indexOf("http") !== 0) return; // needs a real ID over http(s)
+    var ids = [CONFIG.gaId, CONFIG.googleAdsId].filter(Boolean);
+    if (!ids.length || location.protocol.indexOf("http") !== 0) return; // needs an ID over http(s)
     var s = document.createElement("script");
     s.async = true;
-    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(ids[0]);
     document.head.appendChild(s);
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
-    window.gtag("config", id);
+    ids.forEach(function (id) { window.gtag("config", id); });
   }
   // Deliver a captured lead to your endpoint (no-op until CONFIG.leadEndpoint is set).
   function postLead(lead) {
@@ -516,11 +516,31 @@
             "<h2>Talk to us</h2>" +
             '<p class="contact-line"><span aria-hidden="true">📞</span> <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a></p>" +
             '<p class="muted">Available 7 days a week.</p>' +
-            '<p class="contact-line"><span aria-hidden="true">📍</span> ' + escapeHtml(COMPANY.region) + "</p>" +
+            '<p class="contact-line"><span aria-hidden="true">✉️</span> <a href="mailto:' + escapeHtml(COMPANY.email) + '">' + escapeHtml(COMPANY.email) + "</a></p>" +
+            '<p class="contact-line"><span aria-hidden="true">📍</span> <a href="' + COMPANY.mapHref + '" target="_blank" rel="noopener">' + escapeHtml(COMPANY.addressText) + "</a></p>" +
             '<div class="assess-note" style="margin-top:1.2rem">Prefer to browse first? <a href="#/shop">Explore our products</a> and add items to your quote as you go.</div>' +
           "</aside>" +
         "</div>" +
       "</div></section>";
+  }
+
+  // Build a prefilled email to the business (real lead-delivery fallback).
+  function buildMailto(lead) {
+    var c = lead.customer || {};
+    var lines = ["New " + (lead.type || "quote") + " request — " + lead.ref, ""];
+    if (c.name) lines.push("Name: " + c.name);
+    if (c.phone) lines.push("Phone: " + c.phone);
+    if (c.email) lines.push("Email: " + c.email);
+    if (c.postal) lines.push("Postal code: " + c.postal);
+    if (c.interest) lines.push("Interested in: " + c.interest);
+    if (c.contact) lines.push("Preferred contact: " + c.contact);
+    if (c.message) { lines.push(""); lines.push("Message: " + c.message); }
+    if (lead.items && lead.items.length) {
+      lines.push("", "Items:");
+      lead.items.forEach(function (it) { lines.push("- " + it.name + (it.note ? " (" + it.note + ")" : "")); });
+    }
+    return "mailto:" + COMPANY.email + "?subject=" + encodeURIComponent("Quote request " + lead.ref) +
+      "&body=" + encodeURIComponent(lines.join("\n"));
   }
 
   function renderSent(ref) {
@@ -545,6 +565,7 @@
       recap +
       '<div class="confirm-actions">' +
         '<a class="btn btn-primary" href="#/shop">Continue browsing</a>' +
+        (lead ? '<a class="btn btn-ghost" href="' + buildMailto(lead) + '">✉️ Email a copy to us</a>' : "") +
         phoneCta("btn-ghost") +
       "</div>" +
       '<p class="fine muted" style="margin-top:1rem">This demo stores your request in your browser. Connect a form endpoint or email service to receive leads automatically — see the project README.</p>' +

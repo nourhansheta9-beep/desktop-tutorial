@@ -21,7 +21,14 @@
     region: "Serving the Greater Toronto Area",
     phone: "905-615-9302",
     phoneHref: "tel:+19056159302",
-    email: null, // Help Mobility publishes no public email — contact is by phone or form.
+    email: "st@helpmobility.ca",       // from the site's privacy policy
+    address: {
+      line: "4161 Sladeview Crescent, Unit 8",
+      city: "Mississauga", province: "ON", postal: "L5L 5R3", country: "Canada"
+    },
+    addressText: "4161 Sladeview Crescent, Unit 8, Mississauga, ON L5L 5R3",
+    mapHref: "https://www.google.com/maps/search/?api=1&query=" +
+             encodeURIComponent("Help Mobility, 4161 Sladeview Crescent Unit 8, Mississauga, ON L5L 5R3"),
     currency: "CAD"
   };
 
@@ -37,7 +44,10 @@
     leadEndpoint: "",
     // Paste a Google Analytics 4 Measurement ID (e.g. "G-XXXXXXX") to enable
     // analytics + conversion tracking (phone clicks and lead submissions).
-    gaId: ""
+    gaId: "",
+    // Google Ads tag — taken from the live site (they already run Google Ads).
+    // Loads gtag for remarketing + conversion tracking on every page.
+    googleAdsId: "AW-740552287"
   };
 
   // Real customer reviews. LEAVE EMPTY until you have genuine reviews — the

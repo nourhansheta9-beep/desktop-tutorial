@@ -35,10 +35,13 @@ submission is now POSTed to a URL of your choice. Paste it into
 **formspree.io** (free) and paste its endpoint — leads then arrive in your inbox
 instantly. (Until set, leads are still saved in the browser.)
 
-**2. Analytics + call tracking — wired, needs a GA4 ID.** Paste your Google
-Analytics 4 Measurement ID into `CONFIG.gaId`. It auto‑loads GA4 and fires a
-`generate_lead` event on every quote/callback and a `contact` event on every
-phone‑number tap — so you can see exactly what drives calls.
+**2. Analytics + call tracking — wired with your real Google Ads tag.** The live
+site already runs **Google Ads** (`AW-740552287`), so that tag is now loaded on
+every page (SPA + landing pages) for remarketing and conversion tracking, and a
+`generate_lead` event fires on every quote/callback plus a `contact` event on every
+phone‑number tap. *(No GA4 property was found on the site — add a GA4 Measurement ID
+to `CONFIG.gaId` if you want GA4 reporting too. To count Ads conversions, create a
+conversion action in Google Ads and I'll add its `send_to` label.)*
 
 **3. Real SEO landing pages — generated.** Standalone, crawlable pages now exist
 (shared styling, real content, JSON‑LD, click‑to‑call):
@@ -53,10 +56,21 @@ list in that file to add more areas).
 `REVIEWS` in `assets/js/data.js` and a “What our customers say” section appears
 automatically. **No fake reviews were added.**
 
-## 🔜 Still needs you (off‑site, highest impact of all)
+### Pulled from the live site (now wired in)
 
-- **Google Business Profile** — claim/optimize it (hours, photos, services, service area). For “medical equipment near me” this is often the #1 source of calls. *Send your address + hours and I’ll prepare the listing + wire them into the header/contact page/JSON‑LD.*
-- **Collect Google reviews** — then we both show them on‑site and boost local ranking.
-- **Paid search (optional)** — “stairlift installation GTA”, “hospital bed rental Toronto”, pointed at the new landing pages, with funding as the hook.
+These were recovered from the site itself, so I applied them everywhere (header/
+contact/footer/structured data/landing pages):
 
-> Fastest revenue: paste a **Formspree endpoint** (#1) so leads reach you today, add a **GA4 ID** (#2), and claim your **Google Business Profile**.
+- **Address:** 4161 Sladeview Crescent, Unit 8, Mississauga, ON L5L 5R3 *(was only in the privacy policy)*
+- **Email:** st@helpmobility.ca *(was only in the privacy policy)* — quote/callback confirmations can now email a copy here, a real lead path even before Formspree.
+- **Phone:** 905-615-9302 *(was only on the repairs page)*
+- **Google Ads tag:** AW-740552287
+
+## 🔜 Still needs you (not available on the site)
+
+- **Business hours** — the site only says “7 days a week,” no specific times. *Send your hours and I’ll add them to the contact page + `openingHoursSpecification` schema.*
+- **Formspree (or similar) endpoint** — the live site posts to Shopify’s own form, which isn’t reusable here. A free Formspree endpoint in `CONFIG.leadEndpoint` delivers leads automatically (the email‑a‑copy fallback to st@helpmobility.ca already works today).
+- **Google Business Profile + real reviews** — claim/optimize the profile (now that we have the address) and collect reviews; add them to `REVIEWS` and they show on‑site. Usually the #1 source of “near me” calls.
+- **Paid search (optional)** — point your existing Google Ads at the new `/areas/…` and `/products/…` landing pages, with funding as the hook.
+
+> Fastest remaining wins: claim the **Google Business Profile**, paste a **Formspree endpoint**, and send your **hours**.
