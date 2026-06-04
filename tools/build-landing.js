@@ -51,6 +51,10 @@ const RENTAL_BLURB = {
 /* ----------------------------------------------------------------- helpers */
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 const pic = (jpg, alt, w, h, attrs) => `<picture><source type="image/webp" srcset="${jpg.replace(/\.jpg$/, ".webp")}"><img src="${jpg}" alt="${esc(alt)}" width="${w}" height="${h}" ${attrs || 'loading="lazy"'}></picture>`;
+// Make root-absolute href/src/srcset relative to the page, so the site works at
+// any mount point (domain root OR a GitHub Pages /<repo>/ sub-path). Absolute
+// https:// URLs (canonical, OG, JSON-LD) are left untouched.
+const relativize = (html, up) => html.replace(/(href|src|srcset)="\/([^"]*)"/g, (_m, a, rest) => `${a}="${up}${rest}"`);
 const jsonLd = (obj) => '<script type="application/ld+json">\n' + JSON.stringify(obj, null, 2) + "\n</script>";
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -194,7 +198,8 @@ function hero(eyebrow, h1, lead, img, imgAlt, notes) {
 function write(rel, html) {
   const dir = path.join(ROOT, rel);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, "index.html"), html);
+  const up = "../".repeat(rel.split("/").length); // depth → relative prefix to mount root
+  fs.writeFileSync(path.join(dir, "index.html"), relativize(html, up));
   return "/" + rel.replace(/\\/g, "/") + "/";
 }
 
