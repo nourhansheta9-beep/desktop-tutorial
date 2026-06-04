@@ -25,6 +25,26 @@
     currency: "CAD"
   };
 
+  /*
+   * Integration config — fill these in to "go live" with real lead delivery
+   * and analytics. Both are optional: empty = the site still works (leads are
+   * stored in the browser; no analytics loaded).
+   */
+  var CONFIG = {
+    // Paste a Formspree / Getform / Google Apps Script / CRM webhook URL here and
+    // every quote, contact and callback submission is POSTed to it as JSON.
+    // Quick start: create a form at https://formspree.io and paste its endpoint.
+    leadEndpoint: "",
+    // Paste a Google Analytics 4 Measurement ID (e.g. "G-XXXXXXX") to enable
+    // analytics + conversion tracking (phone clicks and lead submissions).
+    gaId: ""
+  };
+
+  // Real customer reviews. LEAVE EMPTY until you have genuine reviews — the
+  // testimonials section only appears when this has entries (no fake reviews).
+  // Example: { name: "First L.", city: "Toronto, ON", stars: 5, quote: "…" }
+  var REVIEWS = [];
+
   // Top value propositions — each grounded in real site content
   // (three core services, GTA coverage, funding help, 7-day service).
   var VALUES = [
@@ -177,4 +197,6 @@
   window.HM.FUNDING = FUNDING;
   window.HM.HOWITWORKS = HOWITWORKS;
   window.HM.FAQ = FAQ;
+  window.HM.CONFIG = CONFIG;
+  window.HM.REVIEWS = REVIEWS;
 })();

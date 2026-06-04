@@ -312,7 +312,7 @@ h1:focus, h2:focus { outline: none; }
 
 /* ---------------- Footer ---------------- */
 .site-footer { background: var(--ink); color: #cdd9e4; margin-top: 3rem; }
-.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 1.6rem; padding: 2.6rem 0; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 1.6rem; padding: 2.6rem 0; }
 .footer-brand-logo { background: #fff; border-radius: 12px; padding: .6rem .8rem; display: inline-block; }
 .footer-brand-logo img { height: 36px; width: auto; }
 .site-footer h4 { color: #fff; margin: 0 0 .7rem; }
@@ -345,6 +345,8 @@ h1:focus, h2:focus { outline: none; }
 .funding-banner .lead { font-size: 1.12rem; color: var(--ink-soft); margin: .4rem 0 1.2rem; }
 .ticks.big { margin: 0; gap: .55rem; }
 .ticks.big li { font-weight: 600; }
+.ticks.cols { grid-template-columns: repeat(2, 1fr); gap: .55rem 1.4rem; }
+@media (max-width: 560px) { .ticks.cols { grid-template-columns: 1fr; } }
 
 /* ---------------- How it works ---------------- */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
@@ -380,6 +382,13 @@ h1:focus, h2:focus { outline: none; }
 .cb-success .check { width: 64px; height: 64px; border-radius: 999px; background: #fff; color: var(--green); display: grid; place-items: center; font-size: 2rem; margin: 0 auto 1rem; }
 .cb-success h2 { color: #fff; }
 
+/* ---------------- Reviews (rendered only when real reviews exist) ---------------- */
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.review { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.4rem; margin: 0; }
+.review .stars { color: #e8a200; font-size: 1.05rem; letter-spacing: 1px; }
+.review blockquote { margin: .6rem 0 .9rem; font-size: 1.02rem; color: var(--ink); }
+.review figcaption { font-weight: 700; }
+
 /* ---------------- Header desktop call link ---------------- */
 .call-link { font-weight: 700; }
 
@@ -397,6 +406,7 @@ h1:focus, h2:focus { outline: none; }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .value-strip { grid-template-columns: repeat(2, 1fr); }
   .funding-banner { grid-template-columns: 1fr; }
+  .reviews { grid-template-columns: repeat(2, 1fr); }
   .split { grid-template-columns: 1fr; }
   .quote-grid { grid-template-columns: 1fr; }
   .q-list { position: static; }
@@ -426,6 +436,7 @@ h1:focus, h2:focus { outline: none; }
   .col-card { flex-direction: column; align-items: flex-start; gap: .8rem; }
   .col-card .btn { width: 100%; }
   .steps { grid-template-columns: 1fr; }
+  .reviews { grid-template-columns: 1fr; }
   .funding-banner { padding: 1.5rem; }
   /* sticky mobile conversion bar: always-visible Call + Free quote */
   .call-link { display: none; }

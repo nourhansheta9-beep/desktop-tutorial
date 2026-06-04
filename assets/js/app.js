@@ -12,7 +12,8 @@
   var HM = window.HM || {};
   var COMPANY = HM.COMPANY, VALUES = HM.VALUES, CATEGORIES = HM.CATEGORIES,
       RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING,
-      HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ;
+      HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ,
+      CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [];
 
   var QUOTE_KEY = "hm_quote_v1";
   var LEADS_KEY = "hm_leads_v1";
@@ -35,6 +36,35 @@
   function phoneCta(cls) {
     return '<a class="btn ' + (cls || "btn-ghost") + '" href="' + COMPANY.phoneHref + '">' +
       '<span aria-hidden="true">📞</span> ' + escapeHtml(COMPANY.phone) + "</a>";
+  }
+
+  /* --------------------------------------------------- analytics + delivery */
+  // Fire a GA4 event (no-op until CONFIG.gaId is set in data.js).
+  function track(event, params) {
+    try { if (typeof window.gtag === "function") window.gtag("event", event, params || {}); } catch (e) {}
+  }
+  function initAnalytics() {
+    var id = CONFIG.gaId;
+    if (!id || location.protocol.indexOf("http") !== 0) return; // needs a real ID over http(s)
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", id);
+  }
+  // Deliver a captured lead to your endpoint (no-op until CONFIG.leadEndpoint is set).
+  function postLead(lead) {
+    if (!CONFIG.leadEndpoint) return;
+    try {
+      fetch(CONFIG.leadEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(lead)
+      }).catch(function () {});
+    } catch (e) {}
   }
 
   /* ------------------------------------------------------------- quote list */
@@ -180,6 +210,21 @@
       '<div class="faq">' + items + "</div></div></section>";
   }
 
+  // Social proof — only renders once REAL reviews are added to data.js (REVIEWS).
+  function reviewsSection() {
+    if (!REVIEWS.length) return "";
+    var cards = REVIEWS.map(function (r) {
+      var n = Math.round(r.stars || 5);
+      var stars = "★★★★★☆☆☆☆☆".slice(5 - n, 10 - n);
+      return '<figure class="review"><div class="stars" aria-label="' + n + ' out of 5 stars">' + stars + "</div>" +
+        "<blockquote>&ldquo;" + escapeHtml(r.quote) + "&rdquo;</blockquote>" +
+        "<figcaption>" + escapeHtml(r.name) + (r.city ? ' · <span class="muted">' + escapeHtml(r.city) + "</span>" : "") + "</figcaption></figure>";
+    }).join("");
+    return '<section class="section alt"><div class="container">' +
+      '<div class="section-head"><div><h2>What our customers say</h2><p>Real experiences from people we’ve helped stay independent.</p></div></div>' +
+      '<div class="reviews">' + cards + "</div></div></section>";
+  }
+
   // Lowest-friction lead capture: just a name + phone, "we'll call you".
   function callbackCard() {
     return '<div class="callback-card">' +
@@ -254,6 +299,8 @@
         "</div>" +
         callbackCard() +
       "</div></div></section>" +
+
+      reviewsSection() +
 
       faqSection() +
 
@@ -611,7 +658,8 @@
       customer: { name: name, phone: phone, contact: "Phone call" }, items: []
     };
     saveLead(lead);
-    /* Lead delivery hook — see handleRequestSubmit for wiring to your CRM/endpoint. */
+    postLead(lead);                                  // deliver to CONFIG.leadEndpoint if set
+    track("generate_lead", { type: "callback" });    // GA4 conversion (if CONFIG.gaId set)
     var card = form.closest(".callback-card") || form.parentNode;
     card.innerHTML = '<div class="cb-success"><div class="check" aria-hidden="true">✓</div>' +
       "<h2>Thanks, " + escapeHtml(name.split(" ")[0]) + "!</h2>" +
@@ -650,21 +698,23 @@
       items: type === "quote" ? quote.slice() : []
     };
     saveLead(lead);
-
-    /* ---- Lead delivery hook ----------------------------------------------
-       This demo persists leads in localStorage. To receive leads for real,
-       POST `lead` to your endpoint here, e.g.:
-         fetch("/api/leads", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(lead)});
-       or use Formspree / a Google Apps Script / your CRM webhook. See README.
-    ----------------------------------------------------------------------- */
+    postLead(lead);                              // deliver to CONFIG.leadEndpoint if set
+    track("generate_lead", { type: type });      // GA4 conversion (if CONFIG.gaId set)
 
     if (type === "quote") clearQuote();
     go("/sent?ref=" + encodeURIComponent(lead.ref));
   }
 
   /* ------------------------------------------------------------------ boot */
+  // Track click-to-call as a conversion (phone is the #1 action for this audience).
+  document.addEventListener("click", function (e) {
+    var tel = e.target.closest && e.target.closest('a[href^="tel:"]');
+    if (tel) track("contact", { method: "phone" });
+  });
+
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", function () {
+    initAnalytics();
     var y = document.getElementById("year"); if (y) y.textContent = new Date().getFullYear();
     updateQuoteBadge();
     render();

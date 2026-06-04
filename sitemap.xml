@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://helpmobility.ca/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://helpmobility.ca/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://helpmobility.ca/products/mobility/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/products/accessibility/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/products/bathroom/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/products/daily/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/toronto/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/mississauga/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/brampton/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/scarborough/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/north-york/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/etobicoke/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/markham/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/vaughan/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://helpmobility.ca/areas/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
