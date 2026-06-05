@@ -251,6 +251,7 @@ h1:focus, h2:focus { outline: none; }
 .feature { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem 1.4rem; }
 .feature h3 { margin: 0 0 .35rem; color: var(--blue); }
 .feature p { margin: 0; color: var(--ink-soft); }
+.feature .vico { margin-bottom: .85rem; }
 
 .assess-note {
   background: var(--green-050); border: 1px solid #cce7cf; border-radius: var(--radius-sm);

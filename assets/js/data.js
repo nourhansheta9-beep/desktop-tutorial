@@ -214,6 +214,16 @@
   // Brands we carry — names only (factual), for trust and brand-search traffic.
   var BRANDS = ["Invacare", "Pride Mobility", "Quantum Rehab", "Sunrise Medical", "Permobil", "Drive Medical", "ROHO", "Fortress", "Hälsa"];
 
+  // Why families choose Help Mobility — concrete, grounded reasons.
+  var WHYUS = [
+    { icon: "tag", title: "Everything in one place", text: "Sales, rentals and repairs for mobility and home‑healthcare equipment — one trusted partner." },
+    { icon: "coins", title: "We handle the funding", text: "We find the programs you qualify for and complete the ADP, ODSP, WSIB and March of Dimes paperwork for you." },
+    { icon: "wrench", title: "Service 7 days a week", text: "Same‑day repairs across the GTA, with loaner equipment so you’re never left without." },
+    { icon: "truck", title: "Delivery & installation", text: "We deliver, set up and install across the Greater Toronto Area — ready to use safely." },
+    { icon: "users", title: "Expert, personal guidance", text: "Real people who get to know your needs, your home and your budget before recommending anything." },
+    { icon: "heart", title: "Comfort, safety & independence", text: "Equipment chosen to keep you active and independent at home — helping you get active, today." }
+  ];
+
   // "How it works" — three simple, reassuring steps (reduces purchase anxiety).
   var HOWITWORKS = [
     { step: "1", title: "Tell us what you need", text: "Call us or send a quick request. We listen to your situation — no jargon, no pressure." },
@@ -275,6 +285,7 @@
   window.HM.FUNDING = FUNDING;
   window.HM.FUNDING_STEPS = FUNDING_STEPS;
   window.HM.BRANDS = BRANDS;
+  window.HM.WHYUS = WHYUS;
   window.HM.HOWITWORKS = HOWITWORKS;
   window.HM.FAQ = FAQ;
   window.HM.CONFIG = CONFIG;
