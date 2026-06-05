@@ -445,7 +445,10 @@ h1:focus, h2:focus { outline: none; }
 .prod-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
 .prod-brand { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--acc, var(--blue)); }
 .prod-card h4 { margin: .15rem 0 .3rem; font-size: 1.05rem; font-family: var(--font-head); line-height: 1.25; }
-.prod-body > p { margin: 0 0 .7rem; color: var(--muted); font-size: .92rem; flex: 1; }
+.prod-body > p { margin: 0 0 .6rem; color: var(--muted); font-size: .92rem; }
+.prod-specs { list-style: none; margin: 0 0 .8rem; padding: 0; display: grid; gap: .28rem; }
+.prod-specs li { position: relative; padding-left: 1.1rem; font-size: .85rem; color: var(--ink-soft); }
+.prod-specs li::before { content: ""; position: absolute; left: 0; top: .5em; width: 6px; height: 6px; border-radius: 50%; background: var(--acc, var(--blue)); }
 .fund-badges { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .9rem; }
 .fund-badge { font-size: .68rem; font-weight: 800; letter-spacing: .3px; padding: .22rem .5rem; border-radius: 6px; cursor: help; }
 .fund-adp { background: var(--blue-050); color: var(--blue); }

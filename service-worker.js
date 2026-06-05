@@ -1,5 +1,5 @@
 /* Help Mobility — service worker (offline app shell for PWA install) */
-var CACHE = "help-mobility-v6";
+var CACHE = "help-mobility-v7";
 var ASSETS = [
   "./",
   "./index.html",

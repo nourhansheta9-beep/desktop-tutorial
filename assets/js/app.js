@@ -35,11 +35,15 @@
     var media = pr.img
       ? '<div class="prod-media">' + picture(pr.img, pr.name, 600, 400) + "</div>"
       : '<div class="prod-media illus cat-' + g.cat + '" aria-hidden="true">' + ico(pr.pic || g.icon) + "</div>";
+    var specs = (pr.specs && pr.specs.length)
+      ? '<ul class="prod-specs">' + pr.specs.map(function (s) { return "<li>" + escapeHtml(s) + "</li>"; }).join("") + "</ul>"
+      : "";
     return '<article class="prod-card">' + media +
       '<div class="prod-body">' +
         (pr.brand ? '<span class="prod-brand">' + escapeHtml(pr.brand) + "</span>" : "") +
         "<h4>" + escapeHtml(pr.name) + "</h4>" +
         '<p>' + escapeHtml(pr.blurb) + "</p>" +
+        specs +
         fundBadges(pr.funding || g.funding) +
         '<button class="btn btn-primary btn-sm" data-action="add" data-id="' + slugify(pr.name) +
           '" data-name="' + escapeHtml(pr.name) + '" data-note="' + escapeHtml(g.name) + '">Add to quote</button>' +
