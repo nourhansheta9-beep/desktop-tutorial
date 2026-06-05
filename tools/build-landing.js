@@ -284,17 +284,22 @@ RENTALS.forEach((r) => {
 
 // Funding page
 {
-  const cards = FUNDING.map((f) => `<div class="feature"><h3>${esc(f.name)}</h3><p>${esc(f.text)}</p></div>`).join("");
+  const STEPS = HM.FUNDING_STEPS || [];
+  const steps = STEPS.map((s) => `<div class="step"><div class="step-n">${ic(s.icon)}</div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join("");
+  const cards = FUNDING.map((f) => `<article class="fund-card"><div class="fund-card-head"><h3>${esc(f.name)}</h3>${f.tag ? `<span class="fund-badge fund-${f.tag.toLowerCase()}">${esc(f.tag)}</span>` : ""}</div>${f.who ? `<p><strong>Who it&rsquo;s for:</strong> ${esc(f.who)}</p>` : ""}${f.covers ? `<p><strong>What it covers:</strong> ${esc(f.covers)}</p>` : ""}${f.apply ? `<p><strong>How to apply:</strong> ${esc(f.apply)}</p>` : ""}</article>`).join("");
   const html = head({
     title: `Funding & Assistance for Mobility Equipment in Ontario | Help Mobility`,
-    description: `You may not have to pay full price. Help Mobility helps you access ADP, ODSP, Ontario Works, WSIB, March of Dimes and Spinal Cord Injury Ontario funding for mobility equipment. Call ${COMPANY.phone}.`,
+    description: `You may not have to pay full price. Help Mobility finds the funding you qualify for and handles the paperwork — ADP, ODSP, Ontario Works, WSIB, March of Dimes and Spinal Cord Injury Ontario. Call ${COMPANY.phone}.`,
     canonical: "/funding/", ld: [localBusinessLd(), breadcrumbLd([{ name: "Home", path: "/" }, { name: "Funding & Assistance", path: "/funding/" }]), faqLd()],
   }) + header() +
     crumb([{ name: "Home", path: "/" }, { name: "Funding & Assistance" }]) +
-    `<section class="section" style="padding-top:1.4rem"><div class="container"><h1>Funding &amp; assistance programs</h1>
-      <p class="lead">You may not have to pay full price for the equipment you need. Help Mobility helps you understand and apply for the programs you qualify for.</p>
-      <div class="feature-grid">${cards}</div>
-      <p class="fine muted" style="margin-top:1rem">Eligibility and coverage are set by each program. We'll help you find the right fit for your situation.</p></div></section>` +
+    `<section class="section" style="padding-top:1.4rem"><div class="container"><p class="eyebrow">Funding &amp; assistance</p><h1>You may not have to pay full price</h1>
+      <p class="lead">Cost is the biggest worry for most families &mdash; so we find the funding you qualify for and <strong>handle the paperwork for you</strong>. Many customers end up paying only a fraction of the price.</p>
+      <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/#/quote">Check what you qualify for</a><a class="btn btn-accent btn-lg" href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a></div></div></section>
+      <section class="section alt"><div class="container"><div class="section-head"><div><h2>How funding works</h2><p>Three simple steps &mdash; we do the heavy lifting.</p></div></div><div class="steps">${steps}</div></div></section>
+      <section class="section"><div class="container"><div class="section-head"><div><h2>Programs we help you access</h2><p>We match you to the right program and complete the application.</p></div></div>
+      <div class="fund-grid">${cards}</div>
+      <p class="fine muted" style="margin-top:1rem">Eligibility and coverage are set by each program and depend on your situation &mdash; we&rsquo;ll help you confirm what you qualify for.</p></div></section>` +
     faqSection() + ctaBand("Find out what you qualify for") + footer();
   urls.push(write("funding", html));
 }
