@@ -30,6 +30,8 @@ const HM = win.HM;
 const COMPANY = HM.COMPANY, CATEGORIES = HM.CATEGORIES, RENTALS = HM.RENTALS,
   REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING, FAQ = HM.FAQ;
 const ADS = (HM.CONFIG && HM.CONFIG.googleAdsId) || "";
+const ICONS = HM.ICONS || {};
+const ic = (n) => ICONS[n] || "";
 const LOGO = "/assets/img/logo-dark.png";
 
 // Curated, high-intent GTA cities. Expand once GBP/analytics confirm demand.
@@ -98,6 +100,9 @@ function head(opts) {
   <meta name="twitter:title" content="${esc(opts.title)}" />
   <meta name="twitter:description" content="${esc(opts.description)}" />
   <meta name="twitter:image" content="${ORIGIN}/assets/img/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   ${opts.ld.map(jsonLd).join("\n  ")}${ADS ? `
   <!-- Google Ads (gtag) — remarketing + conversion tracking -->
@@ -110,15 +115,15 @@ function header() {
   return `<body>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="topbar"><div class="container">
-    <span>🍁 Mobility &amp; home healthcare across the GTA</span>
-    <span>🛟 Sales · Rentals · Repairs — 7 days a week</span>
-    <a href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a>
+    <span>Mobility &amp; home healthcare across the Greater Toronto Area</span>
+    <span>Sales · Rentals · Repairs — 7 days a week</span>
+    <a href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a>
   </div></div>
   <header class="site-header"><div class="header-row">
     <a class="brand" href="/" aria-label="Help Mobility — home"><img src="${LOGO}" alt="Help Mobility — helping you get active, today!" width="153" height="40" /></a>
     <div class="header-actions">
-      <a class="btn btn-ghost btn-sm call-link" href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a>
-      <a class="btn btn-accent btn-sm" href="/#/quote">📝 Get a quote</a>
+      <a class="btn btn-ghost btn-sm call-link" href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a>
+      <a class="btn btn-accent btn-sm" href="/#/quote">${ic("clip")} Get a quote</a>
       <button class="nav-toggle" data-action="nav-toggle" aria-label="Menu" aria-controls="mainnav" aria-expanded="false">☰</button>
     </div>
   </div>
@@ -140,7 +145,7 @@ function fundingBanner() {
     <div><p class="eyebrow">Worried about the cost?</p><h2>You may not have to pay full price</h2>
       <p class="lead">We help you access government and insurer programs that can cover part — or all — of the cost of your equipment.</p>
       <div class="cta-actions cta-left"><a class="btn btn-primary btn-lg" href="/funding/">See funding options</a>
-      <a class="btn btn-ghost btn-lg" href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a></div></div>
+      <a class="btn btn-ghost btn-lg" href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a></div></div>
     <ul class="ticks big">${li}</ul>
   </div></div></section>`;
 }
@@ -154,7 +159,7 @@ function ctaBand(line) {
   return `<section class="section"><div class="container"><div class="cta-band"><h2>${esc(line)}</h2>
     <p>Tell us about your situation and a Help Mobility specialist will recommend the right solution and prepare a clear quote — buy or rent.</p>
     <div class="cta-actions"><a class="btn btn-accent btn-lg" href="/#/quote">Request a free quote</a>
-    <a class="btn btn-outline btn-lg" href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a></div></div></div></section>`;
+    <a class="btn btn-outline btn-lg" href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a></div></div></div></section>`;
 }
 
 function footer() {
@@ -165,8 +170,8 @@ function footer() {
   <footer class="site-footer"><div class="container"><div class="footer-grid">
     <div><span class="footer-brand-logo"><img src="${LOGO}" alt="Help Mobility" width="172" height="45" /></span>
       <p style="color:#cdd9e4;margin:.9rem 0">Helping you get active, today! Sales, rentals and repairs across the Greater Toronto Area.</p>
-      <p>📞 <a href="${COMPANY.phoneHref}" style="display:inline">${COMPANY.phone}</a><br />✉️ <a href="mailto:${COMPANY.email}" style="display:inline">${COMPANY.email}</a></p>
-      <p style="color:#cdd9e4">📍 ${esc(COMPANY.addressText)}</p></div>
+      <p class="footer-contact">${ic("phone")} <a href="${COMPANY.phoneHref}" style="display:inline">${COMPANY.phone}</a><br />${ic("mail")} <a href="mailto:${COMPANY.email}" style="display:inline">${COMPANY.email}</a></p>
+      <p class="footer-contact" style="color:#cdd9e4">${ic("pin")} ${esc(COMPANY.addressText)}</p></div>
     <div><h4>Products</h4>${cats}<a href="/#/shop">All products</a></div>
     <div><h4>Rentals</h4>${rentals}<a href="/rentals/">All rentals</a></div>
     <div><h4>Services</h4><a href="/repairs/">Repairs &amp; Maintenance</a><a href="/funding/">Funding &amp; Assistance</a><a href="/industries/">Industries We Serve</a><a href="/#/quote">Request a quote</a></div>
@@ -174,8 +179,8 @@ function footer() {
   </div></div>
   <div class="footer-bottom">© <span id="year">${new Date().getFullYear()}</span> Help Mobility. ${esc(COMPANY.addressText)}.</div></footer>
   <div class="mobile-cta" aria-label="Quick contact">
-    <a class="btn btn-accent" href="${COMPANY.phoneHref}">📞 Call now</a>
-    <a class="btn btn-primary" href="/#/quote">📝 Free quote</a>
+    <a class="btn btn-accent" href="${COMPANY.phoneHref}">${ic("phone")} Call now</a>
+    <a class="btn btn-primary" href="/#/quote">${ic("clip")} Free quote</a>
   </div>
   <script>document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-action="nav-toggle"]');if(t){var n=document.getElementById('mainnav');var o=n.classList.toggle('open');t.setAttribute('aria-expanded',o?'true':'false');}});</script>
 </body>
@@ -190,8 +195,8 @@ function crumb(trail) {
 function hero(eyebrow, h1, lead, img, imgAlt, notes) {
   return `<section class="hero"><div class="container"><div class="hero-grid"><div>
     <p class="eyebrow">${esc(eyebrow)}</p><h1>${esc(h1)}</h1><p class="lead">${esc(lead)}</p>
-    <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/#/quote">Request a free quote</a><a class="btn btn-accent btn-lg" href="${COMPANY.phoneHref}">📞 ${COMPANY.phone}</a></div>
-    <p class="hero-note">${notes.map((n) => `<span>${n}</span>`).join("")}</p>
+    <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/#/quote">Request a free quote</a><a class="btn btn-accent btn-lg" href="${COMPANY.phoneHref}">${ic("phone")} ${COMPANY.phone}</a></div>
+    <p class="hero-note">${notes.map((n) => `<span>${ic("check")} ${n}</span>`).join("")}</p>
   </div><div class="hero-art">${pic(img, imgAlt, 560, 747, 'fetchpriority="high"')}</div></div></div></section>`;
 }
 
@@ -219,7 +224,7 @@ CATEGORIES.forEach((c) => {
     crumb([{ name: "Home", path: "/" }, { name: "Products", path: "/#/shop" }, { name: c.name }]) +
     hero(`${c.name} · ${COMPANY.region}`, `${c.name} equipment across the Greater Toronto Area`, c.blurb,
       `/assets/img/${CAT_IMG[c.id]}.jpg`, `${c.name} equipment from Help Mobility`,
-      ["✅ Buy or rent", "🤝 Funding help (ADP · ODSP · WSIB)", "🛟 7-day service"]) +
+      ["Buy or rent", "Funding help (ADP · ODSP · WSIB)", "7-day service"]) +
     `<section class="section"><div class="container"><div class="section-head"><div><h2>What we carry</h2><p>A selection of our ${esc(c.name.toLowerCase())} range — ask us about anything you don't see.</p></div></div>
       <ul class="ticks big cols">${cols}</ul>
       <div class="chips" style="margin-top:1.4rem">${others}</div></div></section>` +
@@ -239,7 +244,7 @@ RENTALS.forEach((r) => {
     crumb([{ name: "Home", path: "/" }, { name: "Rentals", path: "/rentals/" }, { name: r.name }]) +
     hero(`Rentals · ${COMPANY.region}`, `${r.name} in the Greater Toronto Area`, blurb,
       `/assets/img/mobility.jpg`, `${r.name} from Help Mobility`,
-      ["✅ Rent by the month", "🚚 Delivery &amp; setup", "🛟 Service 7 days a week"]) +
+      ["Rent by the month", "Delivery &amp; setup", "Service 7 days a week"]) +
     `<section class="section"><div class="container"><div class="section-head"><div><h2>What's included</h2></div></div>
       <ul class="ticks big cols"><li>Delivery and setup across the GTA</li><li>Flexible monthly rental — no long-term commitment</li><li>Servicing and support 7 days a week</li><li>Funding help where you're eligible</li></ul></div></section>` +
     fundingBanner() + faqSection() + ctaBand(`Need a ${r.name.toLowerCase()}?`) + footer();
@@ -324,7 +329,7 @@ CITIES.forEach((city) => {
     hero(`Serving ${city} & nearby`, `Mobility & home-healthcare equipment in ${city}`,
       `Help Mobility supplies, rents and repairs mobility and home-healthcare equipment for ${city} residents and families — with delivery, installation and funding help across the Greater Toronto Area.`,
       `/assets/img/mobility.jpg`, `Staying active and independent in ${city}`,
-      ["✅ Free, no-obligation quote", `🚚 Delivery &amp; install in ${esc(city)}`, "🛟 7-day service"]) +
+      ["Free, no-obligation quote", `🚚 Delivery &amp; install in ${esc(city)}`, "7-day service"]) +
     `<section class="section"><div class="container"><div class="section-head"><div><h2>What we offer in ${esc(city)}</h2><p>Everything for comfort, safety and independence at home.</p></div></div><div class="cat-grid">${cats}</div></div></section>` +
     fundingBanner() + faqSection() + ctaBand(`Need mobility equipment in ${city}?`) + footer();
   urls.push(write(`areas/${s}`, html));
