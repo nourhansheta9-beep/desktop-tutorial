@@ -1,10 +1,11 @@
 /* Help Mobility — service worker (offline app shell for PWA install) */
-var CACHE = "help-mobility-v5";
+var CACHE = "help-mobility-v6";
 var ASSETS = [
   "./",
   "./index.html",
   "./assets/css/styles.css",
   "./assets/js/data.js",
+  "./assets/js/catalog.js",
   "./assets/js/app.js",
   "./manifest.webmanifest",
   "./assets/icons/icon.svg",
