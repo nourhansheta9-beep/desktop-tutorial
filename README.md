@@ -91,6 +91,8 @@ into quote requests. To list individual products with photos and details, add a
 
 ## Go live: leads, analytics, reviews, landing pages
 
+> **Step‑by‑step setup (Formspree leads + Google Business Profile): see [SETUP.md](SETUP.md).**
+
 Open **`assets/js/data.js`** and fill in `CONFIG` / `REVIEWS` — everything is wired:
 
 - **`CONFIG.leadEndpoint`** — paste a Formspree / Getform / Google Apps Script / CRM

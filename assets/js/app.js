@@ -16,7 +16,7 @@
       CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [],
       FEATURED = HM.FEATURED || [], ICONS = HM.ICONS || {},
       CATALOG = HM.CATALOG || [], FUND_INFO = HM.FUND_INFO || {},
-      FUNDING_STEPS = HM.FUNDING_STEPS || [], BRANDS = HM.BRANDS || [];
+      FUNDING_STEPS = HM.FUNDING_STEPS || [], BRANDS = HM.BRANDS || [], WHYUS = HM.WHYUS || [];
 
   function ico(name) { return ICONS[name] || ""; }
   function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
@@ -265,6 +265,18 @@
       "</div></div></section>";
   }
 
+  // Concrete reasons to choose Help Mobility — trust + conversion.
+  function whyUsSection() {
+    if (!WHYUS.length) return "";
+    var items = WHYUS.map(function (w) {
+      return '<div class="feature"><div class="vico" aria-hidden="true">' + ico(w.icon) + "</div>" +
+        "<h3>" + escapeHtml(w.title) + "</h3><p>" + escapeHtml(w.text) + "</p></div>";
+    }).join("");
+    return '<section class="section"><div class="container">' +
+      '<div class="section-head"><div><h2>Why families choose Help Mobility</h2><p>One trusted partner for everything mobility — from the first call to long‑term support.</p></div></div>' +
+      '<div class="feature-grid">' + items + "</div></div></section>";
+  }
+
   function fundingBanner() {
     var list = FUNDING.slice(0, 6).map(function (f) { return "<li>" + escapeHtml(f.name) + "</li>"; }).join("");
     return '<section class="section"><div class="container"><div class="funding-banner">' +
@@ -374,6 +386,8 @@
       "</div></section>" +
 
       assessmentBand() +
+
+      whyUsSection() +
 
       howItWorks() +
 
@@ -668,9 +682,9 @@
       '<div class="ref-box">Reference: ' + escapeHtml(ref || "—") + "</div>" +
       recap +
       '<div class="confirm-actions">' +
-        '<a class="btn btn-primary" href="#/shop">Continue browsing</a>' +
-        (lead ? '<a class="btn btn-ghost" href="' + buildMailto(lead) + '">✉️ Email a copy to us</a>' : "") +
-        phoneCta("btn-ghost") +
+        (lead ? '<a class="btn btn-accent btn-lg" href="' + buildMailto(lead) + '">' + ico("mail") + " Send your request to us</a>" : "") +
+        phoneCta("btn-primary btn-lg") +
+        '<a class="btn btn-ghost" href="#/shop">Continue browsing</a>' +
       "</div>" +
       '<p class="fine muted" style="margin-top:1rem">This demo stores your request in your browser. Connect a form endpoint or email service to receive leads automatically — see the project README.</p>' +
     "</div></section></div>";
