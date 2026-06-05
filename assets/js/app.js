@@ -13,7 +13,10 @@
   var COMPANY = HM.COMPANY, VALUES = HM.VALUES, CATEGORIES = HM.CATEGORIES,
       RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING,
       HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ,
-      CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [];
+      CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [],
+      FEATURED = HM.FEATURED || [], ICONS = HM.ICONS || {};
+
+  function ico(name) { return ICONS[name] || ""; }
 
   var QUOTE_KEY = "hm_quote_v1";
   var LEADS_KEY = "hm_leads_v1";
@@ -35,7 +38,7 @@
   function catById(id) { return CATEGORIES.filter(function (c) { return c.id === id; })[0]; }
   function phoneCta(cls) {
     return '<a class="btn ' + (cls || "btn-ghost") + '" href="' + COMPANY.phoneHref + '">' +
-      '<span aria-hidden="true">📞</span> ' + escapeHtml(COMPANY.phone) + "</a>";
+      ico("phone") + " " + escapeHtml(COMPANY.phone) + "</a>";
   }
 
   /* --------------------------------------------------- analytics + delivery */
@@ -185,6 +188,36 @@
   }
 
   // Cost-objection killer: funding is the single biggest reason people hesitate.
+  // Real-photo equipment gallery — makes the catalogue feel tangible & premium.
+  function featuredSection() {
+    var cards = FEATURED.map(function (f) {
+      return '<a class="feat-card" href="#/shop?cat=' + f.cat + '">' +
+        '<div class="feat-media">' + picture(f.img, f.name, 600, 400) + "</div>" +
+        '<div class="feat-body"><h3>' + escapeHtml(f.name) + "</h3>" +
+        "<p>" + escapeHtml(f.note) + '</p><span class="more">View ' + ico("arrow") + "</span></div></a>";
+    }).join("");
+    return '<section class="section"><div class="container">' +
+      '<div class="section-head"><div><h2>Featured equipment</h2><p>A selection of what we supply, rent and service across the GTA.</p></div>' +
+      '<a class="btn btn-ghost" href="#/shop">View all products</a></div>' +
+      '<div class="feat-grid">' + cards + "</div></div></section>";
+  }
+
+  // Clinical / human "we help you choose" band using the real assessment photo.
+  function assessmentBand() {
+    return '<section class="section alt"><div class="container"><div class="assess-band">' +
+      '<div class="assess-media">' + picture("assets/img/lifestyle.jpg", "A Help Mobility specialist assessing a client’s needs", 700, 470) + "</div>" +
+      '<div class="assess-copy"><p class="eyebrow">Personal, expert guidance</p>' +
+      "<h2>We help you choose the right equipment</h2>" +
+      '<p class="lead">Not sure what you need? Our team gets to know your situation, your home and your budget, then recommends the right solution — and handles delivery, setup and funding.</p>' +
+      '<ul class="ticks">' +
+        "<li>One-on-one advice from people who care</li>" +
+        "<li>Help applying for ADP, ODSP, WSIB &amp; more</li>" +
+        "<li>Delivery, installation and 7-day service</li>" +
+      "</ul>" +
+      '<div class="hero-cta"><a class="btn btn-primary btn-lg" href="#/quote">Request a free quote</a>' + phoneCta("btn-accent btn-lg") + "</div>" +
+      "</div></div></div></section>";
+  }
+
   function fundingBanner() {
     var list = FUNDING.slice(0, 6).map(function (f) { return "<li>" + escapeHtml(f.name) + "</li>"; }).join("");
     return '<section class="section"><div class="container"><div class="funding-banner">' +
@@ -251,7 +284,7 @@
   /* ------------------------------------------------------------------ views */
   function renderHome() {
     var values = VALUES.map(function (v) {
-      return '<div class="item"><div class="e" aria-hidden="true">' + v.icon + "</div>" +
+      return '<div class="item"><div class="vico" aria-hidden="true">' + ico(v.icon) + "</div>" +
         '<div><div class="t">' + escapeHtml(v.title) + '</div><div class="d">' + escapeHtml(v.text) + "</div></div></div>";
     }).join("");
 
@@ -272,7 +305,7 @@
             '<a class="btn btn-primary btn-lg" href="#/quote">Request a free quote</a>' +
             phoneCta("btn-accent btn-lg") +
           "</div>" +
-          '<p class="hero-note"><span>✅ Free, no-obligation quote</span><span>🤝 Funding help (ADP · ODSP · WSIB)</span><span>🛟 Service 7 days a week</span></p>' +
+          '<p class="hero-note"><span>' + ico("check") + " Free, no-obligation quote</span><span>" + ico("coins") + " Funding help (ADP · ODSP · WSIB)</span><span>" + ico("clock") + " Service 7 days a week</span></p>" +
         "</div>" +
         '<div class="hero-art">' +
           picture("assets/img/mobility.jpg", "A person staying active and independent with mobility support", 560, 747, 'fetchpriority="high"') +
@@ -281,6 +314,8 @@
 
       '<div class="container"><div class="value-strip">' + values + "</div></div>" +
 
+      featuredSection() +
+
       fundingBanner() +
 
       '<section class="section"><div class="container">' +
@@ -288,6 +323,8 @@
         '<a class="btn btn-ghost" href="#/shop">View all products</a></div>' +
         '<div class="cat-grid">' + cats + "</div>" +
       "</div></section>" +
+
+      assessmentBand() +
 
       howItWorks() +
 
@@ -520,10 +557,10 @@
           '<div class="q-form">' + requestForm("contact") + "</div>" +
           '<aside class="contact-aside">' +
             "<h2>Talk to us</h2>" +
-            '<p class="contact-line"><span aria-hidden="true">📞</span> <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a></p>" +
+            '<p class="contact-line">' + ico("phone") + ' <a href="' + COMPANY.phoneHref + '">' + escapeHtml(COMPANY.phone) + "</a></p>" +
             '<p class="muted">Available 7 days a week.</p>' +
-            '<p class="contact-line"><span aria-hidden="true">✉️</span> <a href="mailto:' + escapeHtml(COMPANY.email) + '">' + escapeHtml(COMPANY.email) + "</a></p>" +
-            '<p class="contact-line"><span aria-hidden="true">📍</span> <a href="' + COMPANY.mapHref + '" target="_blank" rel="noopener">' + escapeHtml(COMPANY.addressText) + "</a></p>" +
+            '<p class="contact-line">' + ico("mail") + ' <a href="mailto:' + escapeHtml(COMPANY.email) + '">' + escapeHtml(COMPANY.email) + "</a></p>" +
+            '<p class="contact-line">' + ico("pin") + ' <a href="' + COMPANY.mapHref + '" target="_blank" rel="noopener">' + escapeHtml(COMPANY.addressText) + "</a></p>" +
             '<div class="assess-note" style="margin-top:1.2rem">Prefer to browse first? <a href="#/shop">Explore our products</a> and add items to your quote as you go.</div>' +
           "</aside>" +
         "</div>" +

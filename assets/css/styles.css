@@ -29,6 +29,7 @@
   --shadow-sm: 0 1px 2px rgba(12, 35, 58, .1);
   --maxw: 1180px;
   --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --font-head: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -47,7 +48,7 @@ body {
 img { max-width: 100%; display: block; }
 a { color: var(--blue); }
 
-h1, h2, h3 { line-height: 1.2; color: var(--ink); margin: 0 0 .4em; }
+h1, h2, h3 { line-height: 1.2; color: var(--ink); margin: 0 0 .4em; font-family: var(--font-head); letter-spacing: -.01em; }
 h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.5px; }
 h2 { font-size: clamp(1.5rem, 3.5vw, 2.1rem); letter-spacing: -.3px; }
 h3 { font-size: 1.2rem; }
@@ -395,6 +396,40 @@ h1:focus, h2:focus { outline: none; }
 /* ---------------- Sticky mobile call/quote bar ---------------- */
 .mobile-cta { display: none; }
 
+/* ---------------- Icons (replace emoji) ---------------- */
+.ico { width: 1.15em; height: 1.15em; display: inline-block; vertical-align: -0.18em; flex: none; }
+.btn .ico { width: 1.1em; height: 1.1em; }
+.vico { width: 54px; height: 54px; border-radius: 14px; flex: none; display: grid; place-items: center; background: var(--blue-050); color: var(--blue); }
+.vico .ico { width: 27px; height: 27px; }
+.value-strip .item { align-items: center; }
+.hero-note span { gap: .4rem; }
+.hero-note .ico { color: var(--green-dark); }
+.contact-line { display: flex; align-items: center; gap: .55rem; }
+.contact-line .ico { color: var(--blue); width: 22px; height: 22px; }
+.more .ico { width: 1em; height: 1em; vertical-align: -0.12em; }
+.topbar .ico { width: 16px; height: 16px; vertical-align: -.2em; }
+.footer-contact .ico { width: 18px; height: 18px; vertical-align: -.25em; color: #9fd6a6; }
+
+/* ---------------- Featured equipment gallery ---------------- */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+.feat-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .12s ease, box-shadow .18s ease, border-color .18s; }
+.feat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--blue); }
+.feat-media { aspect-ratio: 3 / 2; background: linear-gradient(135deg, #f1f6fb, #e9f1f8); overflow: hidden; }
+.feat-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.feat-card:hover .feat-media img { transform: scale(1.04); }
+.feat-body { padding: 1.05rem 1.2rem 1.25rem; }
+.feat-body h3 { margin: 0 0 .1rem; font-size: 1.12rem; }
+.feat-body p { margin: 0; color: var(--muted); font-size: .95rem; }
+.feat-body .more { margin-top: .55rem; color: var(--blue); font-weight: 700; display: inline-flex; align-items: center; gap: .35rem; }
+
+/* ---------------- Assessment / clinical band ---------------- */
+.assess-band { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; align-items: center; }
+.assess-media { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 3 / 2; }
+.assess-media img { width: 100%; height: 100%; object-fit: cover; }
+.assess-copy .lead { color: var(--ink-soft); font-size: 1.12rem; }
+.assess-copy .ticks { margin: 1rem 0 1.4rem; }
+.assess-copy .hero-cta { margin-top: 0; }
+
 /* =========================================================
    Responsive
    ========================================================= */
@@ -406,6 +441,9 @@ h1:focus, h2:focus { outline: none; }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .value-strip { grid-template-columns: repeat(2, 1fr); }
   .funding-banner { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: repeat(2, 1fr); }
+  .assess-band { grid-template-columns: 1fr; }
+  .assess-media { order: -1; }
   .reviews { grid-template-columns: repeat(2, 1fr); }
   .split { grid-template-columns: 1fr; }
   .quote-grid { grid-template-columns: 1fr; }
@@ -451,6 +489,7 @@ h1:focus, h2:focus { outline: none; }
 
 @media (max-width: 460px) {
   .cat-grid { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: 1fr; }
   .value-strip { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }

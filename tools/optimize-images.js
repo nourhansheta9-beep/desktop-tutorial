@@ -18,6 +18,11 @@ const JOBS = [
   { file: "lift-chair", width: 800 },
   { file: "bathroom", width: 800 },
   { file: "smartdrive", width: 800 },
+  { file: "wheelchair-manual", width: 800 },
+  { file: "wheelchair-folding", width: 900 },
+  { file: "scooter", width: 1000 },      // outdoor lifestyle
+  { file: "lifestyle", width: 1300 },    // clinical assessment banner
+  { file: "wheelchair-detail", width: 800 },
 ];
 
 (async () => {
