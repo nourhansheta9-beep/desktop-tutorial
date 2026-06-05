@@ -38,10 +38,12 @@
    * stored in the browser; no analytics loaded).
    */
   var CONFIG = {
-    // Paste a Formspree / Getform / Google Apps Script / CRM webhook URL here and
-    // every quote, contact and callback submission is POSTed to it as JSON.
-    // Quick start: create a form at https://formspree.io and paste its endpoint.
-    leadEndpoint: "",
+    // Lead delivery — pre-wired to FormSubmit (no signup) so quote/contact/
+    // callback submissions are emailed to the business. One-time: the first
+    // submission triggers a FormSubmit activation email to the address below —
+    // click "Activate" once and all future leads flow automatically.
+    // To switch to Formspree/Getform/your CRM, just replace this URL.
+    leadEndpoint: "https://formsubmit.co/ajax/st@helpmobility.ca",
     // Paste a Google Analytics 4 Measurement ID (e.g. "G-XXXXXXX") to enable
     // analytics + conversion tracking (phone clicks and lead submissions).
     gaId: "",

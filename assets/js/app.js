@@ -97,13 +97,33 @@
     ids.forEach(function (id) { window.gtag("config", id); });
   }
   // Deliver a captured lead to your endpoint (no-op until CONFIG.leadEndpoint is set).
+  // Sends a flat, human-readable payload that emails cleanly (FormSubmit/Formspree).
   function postLead(lead) {
     if (!CONFIG.leadEndpoint) return;
+    var c = lead.customer || {};
+    var items = (lead.items || []).map(function (it) { return it.name + (it.note ? " (" + it.note + ")" : ""); }).join("; ");
+    var payload = {
+      _subject: "New " + (lead.type || "quote") + " request — " + lead.ref,
+      _template: "table",
+      _captcha: "false",
+      _replyto: c.email || "",
+      Reference: lead.ref,
+      Type: lead.type,
+      Name: c.name || "",
+      Phone: c.phone || "",
+      Email: c.email || "",
+      "Postal code": c.postal || "",
+      "Interested in": c.interest || "",
+      "Preferred contact": c.contact || "",
+      Message: c.message || "",
+      Items: items || "(none)",
+      Submitted: lead.date
+    };
     try {
       fetch(CONFIG.leadEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(lead)
+        body: JSON.stringify(payload)
       }).catch(function () {});
     } catch (e) {}
   }

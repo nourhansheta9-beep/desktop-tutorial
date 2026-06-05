@@ -6,38 +6,40 @@ minutes. Follow these in order.
 
 ---
 
-## 1) Connect lead delivery (≈5 min) — so every quote/callback hits your inbox
+## 1) Lead delivery — ALREADY WIRED. Activate it once (≈2 min)
 
-Right now, quote and callback requests are saved in the visitor's browser and the
-confirmation page offers a **"Send your request to us"** email button. To get
-**every** lead delivered to you automatically, connect a free Formspree form.
+Lead delivery is **pre‑configured** to email every quote / contact / callback to
+**`st@helpmobility.ca`** via **FormSubmit** (a free, no‑signup form service). It's
+set in `assets/js/data.js`:
 
-1. Go to **https://formspree.io** and click **Sign up** (free plan = 50
-   submissions/month; paid plans for more).
-2. Verify your email, then **+ New form**.
-   - Form name: `Help Mobility leads`
-   - **Send to email:** `st@helpmobility.ca` (or whatever inbox you check)
-3. Copy the form's **endpoint URL** — it looks like
-   `https://formspree.io/f/abcdwxyz`.
-4. Open **`assets/js/data.js`**, find the `CONFIG` block near the top, and paste it:
-   ```js
-   var CONFIG = {
-     leadEndpoint: "https://formspree.io/f/abcdwxyz",   // ← paste here
-     gaId: "",
-     googleAdsId: "AW-740552287"
-   };
-   ```
-5. Save → commit & push (or send me the endpoint and I'll do it).
-6. **Test it:** open the live site, add an item to a quote, submit the form, and
-   confirm the email lands in your inbox. (First submission asks you to confirm
-   the form once in Formspree.)
+```js
+leadEndpoint: "https://formsubmit.co/ajax/st@helpmobility.ca"
+```
 
-> Alternatives that work the same way: **Getform**, **Web3Forms**, a **Google
-> Apps Script** that appends to a Google Sheet, or a CRM webhook (HubSpot/Zoho).
-> Paste any of their endpoints into `leadEndpoint`.
+**To switch it on (one‑time — verifies you own the inbox):**
 
-**Tip:** turn on Formspree's email + (optional) SMS/Slack notifications so you're
-pinged the moment a lead arrives. Same‑day follow‑up wins the sale.
+1. Open the live site → add something to a quote → **submit the form** once
+   (or use the Contact form).
+2. Check the **st@helpmobility.ca** inbox for an email from **FormSubmit** and
+   click **"Activate Form."**
+3. Done — from then on, **every** submission is emailed to you automatically,
+   formatted as a clean table (name, phone, email, what they want, items), with
+   the customer's email set as reply‑to so you can reply directly.
+
+**Tip — hide your address from bots:** after activating, FormSubmit emails you a
+random alias like `https://formsubmit.co/abc123hash`. Swap that into
+`leadEndpoint` (send it to me and I'll do it) so your email isn't shown in the
+page code.
+
+**Prefer Formspree instead?** (nicer dashboard, spam filtering, Slack/SMS):
+sign up at **https://formspree.io**, create a form that sends to
+`st@helpmobility.ca`, copy its endpoint (`https://formspree.io/f/xxxx`) and
+replace the `leadEndpoint` value. The site sends the same flat fields, so it just
+works.
+
+> Until you activate (or while testing), nothing is lost — leads are also saved
+> in the browser and the confirmation page has a one‑tap **"Send your request to
+> us"** email button.
 
 ---
 
