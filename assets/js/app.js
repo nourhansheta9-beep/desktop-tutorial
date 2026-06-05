@@ -15,7 +15,8 @@
       HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ,
       CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [],
       FEATURED = HM.FEATURED || [], ICONS = HM.ICONS || {},
-      CATALOG = HM.CATALOG || [], FUND_INFO = HM.FUND_INFO || {};
+      CATALOG = HM.CATALOG || [], FUND_INFO = HM.FUND_INFO || {},
+      FUNDING_STEPS = HM.FUNDING_STEPS || [], BRANDS = HM.BRANDS || [];
 
   function ico(name) { return ICONS[name] || ""; }
   function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
@@ -255,6 +256,15 @@
       "</div></div></div></section>";
   }
 
+  // Trusted brands we carry — names only (factual), builds credibility + brand SEO.
+  function brandsSection() {
+    if (!BRANDS.length) return "";
+    return '<section class="section brands-section"><div class="container">' +
+      '<p class="brands-label">Trusted brands we carry</p>' +
+      '<div class="brand-strip">' + BRANDS.map(function (b) { return '<span class="brand-chip">' + escapeHtml(b) + "</span>"; }).join("") +
+      "</div></div></section>";
+  }
+
   function fundingBanner() {
     var list = FUNDING.slice(0, 6).map(function (f) { return "<li>" + escapeHtml(f.name) + "</li>"; }).join("");
     return '<section class="section"><div class="container"><div class="funding-banner">' +
@@ -352,6 +362,8 @@
       '<div class="container"><div class="value-strip">' + values + "</div></div>" +
 
       featuredSection() +
+
+      brandsSection() +
 
       fundingBanner() +
 
@@ -497,20 +509,36 @@
   }
 
   function renderFunding() {
+    var steps = FUNDING_STEPS.map(function (s) {
+      return '<div class="step"><div class="step-n">' + ico(s.icon) + "</div>" +
+        "<h3>" + escapeHtml(s.title) + "</h3><p>" + escapeHtml(s.text) + "</p></div>";
+    }).join("");
     var cards = FUNDING.map(function (f) {
-      return '<div class="feature"><h3>' + escapeHtml(f.name) + "</h3><p>" + escapeHtml(f.text) + "</p></div>";
+      return '<article class="fund-card"><div class="fund-card-head"><h3>' + escapeHtml(f.name) + "</h3>" +
+        (f.tag ? '<span class="fund-badge fund-' + f.tag.toLowerCase() + '">' + escapeHtml(f.tag) + "</span>" : "") + "</div>" +
+        (f.who ? '<p><strong>Who it’s for:</strong> ' + escapeHtml(f.who) + "</p>" : "") +
+        (f.covers ? '<p><strong>What it covers:</strong> ' + escapeHtml(f.covers) + "</p>" : "") +
+        (f.apply ? '<p><strong>How to apply:</strong> ' + escapeHtml(f.apply) + "</p>" : "") +
+        "</article>";
     }).join("");
 
     return crumbs([{ label: "Home", href: "#/" }, { label: "Funding & Assistance" }]) +
       '<section class="section" style="padding-top:1.4rem"><div class="container">' +
-        "<h1>Funding &amp; assistance programs</h1>" +
-        '<p class="lead">You may not have to pay full price for the equipment you need. Help Mobility helps you understand and apply for the programs you qualify for.</p>' +
-        '<div class="feature-grid">' + cards + "</div>" +
-        '<p class="fine muted" style="margin-top:1rem">Eligibility and coverage are set by each program. We’ll help you find the right fit for your situation.</p>' +
-        '<div class="cta-band" style="margin-top:1.6rem"><h2>Find out what you qualify for</h2>' +
-        "<p>Tell us a little about your needs and we’ll guide you through your funding options.</p>" +
-        '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/contact">Ask about funding</a>' + phoneCta("btn-outline btn-lg") + "</div></div>" +
-      "</div></section>" + faqSection();
+        '<p class="eyebrow">Funding &amp; assistance</p>' +
+        "<h1>You may not have to pay full price</h1>" +
+        '<p class="lead">Cost is the biggest worry for most families — so we make it our job to find the funding you qualify for and <strong>handle the paperwork for you</strong>. Many customers end up paying only a fraction of the price.</p>' +
+        '<div class="hero-cta"><a class="btn btn-primary btn-lg" href="#/quote">Check what you qualify for</a>' + phoneCta("btn-accent btn-lg") + "</div>" +
+      "</div></section>" +
+      '<section class="section alt"><div class="container"><div class="section-head"><div><h2>How funding works</h2><p>Three simple steps — we do the heavy lifting.</p></div></div>' +
+        '<div class="steps">' + steps + "</div></div></section>" +
+      '<section class="section"><div class="container"><div class="section-head"><div><h2>Programs we help you access</h2><p>We match you to the right program and complete the application.</p></div></div>' +
+        '<div class="fund-grid">' + cards + "</div>" +
+        '<p class="fine muted" style="margin-top:1rem">Eligibility and coverage are set by each program and depend on your situation — we’ll help you confirm what you qualify for.</p>' +
+      "</div></section>" +
+      '<section class="section"><div class="container"><div class="cta-band"><h2>Let’s find your funding</h2>' +
+        "<p>Tell us a little about your needs and we’ll tell you which programs can help — and handle the applications for you.</p>" +
+        '<div class="cta-actions"><a class="btn btn-accent btn-lg" href="#/quote">Check what you qualify for</a>' + phoneCta("btn-outline btn-lg") + "</div></div></div></section>" +
+      faqSection();
   }
 
   function field(name, label, type, required, autocomplete) {

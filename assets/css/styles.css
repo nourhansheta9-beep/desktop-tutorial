@@ -450,11 +450,29 @@ h1:focus, h2:focus { outline: none; }
 .prod-specs li { position: relative; padding-left: 1.1rem; font-size: .85rem; color: var(--ink-soft); }
 .prod-specs li::before { content: ""; position: absolute; left: 0; top: .5em; width: 6px; height: 6px; border-radius: 50%; background: var(--acc, var(--blue)); }
 .fund-badges { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .9rem; }
-.fund-badge { font-size: .68rem; font-weight: 800; letter-spacing: .3px; padding: .22rem .5rem; border-radius: 6px; cursor: help; }
+.fund-badge { font-size: .68rem; font-weight: 800; letter-spacing: .3px; padding: .22rem .5rem; border-radius: 6px; cursor: help; background: var(--blue-050); color: var(--blue); }
 .fund-adp { background: var(--blue-050); color: var(--blue); }
 .fund-odsp { background: var(--green-050); color: var(--green-dark); }
 .fund-mod { background: #fff2e3; color: #b35a00; }
+.fund-ow { background: #eef3e9; color: #4a6b1f; }
+.fund-wsib { background: #eaf0f6; color: #2c5d8a; }
+.fund-scio { background: #f3eef7; color: #6b4a8a; }
 .prod-body .btn { margin-top: auto; align-self: flex-start; }
+
+/* ---------------- Trusted brands ---------------- */
+.brands-section { padding: 2rem 0; }
+.brands-label { text-align: center; text-transform: uppercase; letter-spacing: .8px; font-size: .8rem; font-weight: 800; color: var(--muted); margin: 0 0 1rem; }
+.brand-strip { display: flex; flex-wrap: wrap; gap: .7rem 1rem; justify-content: center; align-items: center; }
+.brand-chip { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .5rem 1.2rem; }
+
+/* ---------------- Funding programs ---------------- */
+.fund-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+.fund-card { background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--green); border-radius: var(--radius); padding: 1.4rem 1.5rem; }
+.fund-card-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .5rem; }
+.fund-card-head h3 { margin: 0; font-size: 1.12rem; }
+.fund-card p { margin: .4rem 0; color: var(--ink-soft); font-size: .95rem; }
+.fund-card strong { color: var(--ink); }
+.step-n .ico { width: 24px; height: 24px; }
 
 /* =========================================================
    Responsive
@@ -502,6 +520,7 @@ h1:focus, h2:focus { outline: none; }
   .col-card .btn { width: 100%; }
   .steps { grid-template-columns: 1fr; }
   .reviews { grid-template-columns: 1fr; }
+  .fund-grid { grid-template-columns: 1fr; }
   .funding-banner { padding: 1.5rem; }
   /* sticky mobile conversion bar: always-visible Call + Free quote */
   .call-link { display: none; }

@@ -170,14 +170,49 @@
   };
 
   // Funding & assistance programs Help Mobility helps customers access.
+  // Each: short blurb + who it's for / what it covers / how to apply.
   var FUNDING = [
-    { name: "Assistive Devices Program (ADP)", text: "Ontario government program that covers part of the cost of approved mobility equipment." },
-    { name: "Ontario Disability Support Program (ODSP)", text: "Support that can help fund equipment for eligible Ontarians with disabilities." },
-    { name: "Ontario Works", text: "Assistive-devices coverage for people receiving Ontario Works." },
-    { name: "WSIB", text: "Health-care equipment and assistive devices for approved workplace-injury claims." },
-    { name: "March of Dimes Canada", text: "Home & Vehicle Modification Program for accessibility adaptations." },
-    { name: "Spinal Cord Injury Ontario", text: "Equipment-access programs for people living with a spinal cord injury." }
+    { name: "Assistive Devices Program (ADP)", tag: "ADP",
+      text: "Ontario government program that covers part of the cost of approved mobility equipment.",
+      who: "Ontario residents with a valid health card and a long-term (6+ month) physical disability.",
+      covers: "Up to 75% of the cost of approved mobility & seating devices — manual and power wheelchairs, scooters, walkers and positioning/seating.",
+      apply: "An assessment by a registered ADP authorizer (often an OT or PT) confirms your device. We help arrange it and complete the paperwork." },
+    { name: "Ontario Disability Support Program (ODSP)", tag: "ODSP",
+      text: "Support that can help fund equipment for eligible Ontarians with disabilities.",
+      who: "People receiving the Ontario Disability Support Program.",
+      covers: "Health-related and disability benefits that can help fund equipment such as homecare beds, lifts and bathroom-safety items.",
+      apply: "Coverage is through mandatory and discretionary benefits — we help you request the right support." },
+    { name: "Ontario Works", tag: "OW",
+      text: "Assistive-devices coverage for people receiving Ontario Works.",
+      who: "People receiving Ontario Works.",
+      covers: "Discretionary benefits that may cover some assistive devices and home-safety equipment.",
+      apply: "We help you ask your caseworker for assistive-device coverage and provide the quotes they need." },
+    { name: "WSIB", tag: "WSIB",
+      text: "Health-care equipment and assistive devices for approved workplace-injury claims.",
+      who: "People with an approved WSIB (workplace-injury) claim.",
+      covers: "Health-care equipment and assistive devices related to your claim.",
+      apply: "Share your claim details and we coordinate approved equipment directly with WSIB." },
+    { name: "March of Dimes — Home & Vehicle Modification (MOD)", tag: "MOD",
+      text: "Home & Vehicle Modification Program for accessibility adaptations.",
+      who: "Eligible Ontarians who need home or vehicle accessibility changes.",
+      covers: "Grants toward ramps, stairlifts, porch & platform lifts, ceiling lifts and bathroom modifications.",
+      apply: "We help you apply and provide the assessments and quotes the program requires." },
+    { name: "Spinal Cord Injury Ontario", tag: "SCIO",
+      text: "Equipment-access programs for people living with a spinal cord injury.",
+      who: "People living with a spinal cord injury or a similar disability.",
+      covers: "Equipment-access programs plus guidance to other funding you may qualify for.",
+      apply: "We help connect you to the right program and prepare what's needed." }
   ];
+
+  // How funding works — 3 simple steps (we do the heavy lifting).
+  var FUNDING_STEPS = [
+    { icon: "users", title: "We assess your needs", text: "A quick chat (and an authorizer assessment where required) confirms the right equipment for you." },
+    { icon: "clip", title: "We handle the paperwork", text: "We complete the forms and submit to ADP, ODSP, WSIB, March of Dimes and more on your behalf." },
+    { icon: "heart", title: "You get equipped for less", text: "You pay only your share — often a fraction of the price — and we deliver, install and service it." }
+  ];
+
+  // Brands we carry — names only (factual), for trust and brand-search traffic.
+  var BRANDS = ["Invacare", "Pride Mobility", "Quantum Rehab", "Sunrise Medical", "Permobil", "Drive Medical", "ROHO", "Fortress", "Hälsa"];
 
   // "How it works" — three simple, reassuring steps (reduces purchase anxiety).
   var HOWITWORKS = [
@@ -238,6 +273,8 @@
   window.HM.REPAIRS = REPAIRS;
   window.HM.INDUSTRIES = INDUSTRIES;
   window.HM.FUNDING = FUNDING;
+  window.HM.FUNDING_STEPS = FUNDING_STEPS;
+  window.HM.BRANDS = BRANDS;
   window.HM.HOWITWORKS = HOWITWORKS;
   window.HM.FAQ = FAQ;
   window.HM.CONFIG = CONFIG;
