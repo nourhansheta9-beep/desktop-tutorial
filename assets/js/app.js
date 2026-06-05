@@ -14,9 +14,42 @@
       RENTALS = HM.RENTALS, REPAIRS = HM.REPAIRS, INDUSTRIES = HM.INDUSTRIES, FUNDING = HM.FUNDING,
       HOWITWORKS = HM.HOWITWORKS, FAQ = HM.FAQ,
       CONFIG = HM.CONFIG || {}, REVIEWS = HM.REVIEWS || [],
-      FEATURED = HM.FEATURED || [], ICONS = HM.ICONS || {};
+      FEATURED = HM.FEATURED || [], ICONS = HM.ICONS || {},
+      CATALOG = HM.CATALOG || [], FUND_INFO = HM.FUND_INFO || {};
 
   function ico(name) { return ICONS[name] || ""; }
+  function slugify(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
+
+  // flat product list (for search) + group lookup by category
+  var ALL_PRODUCTS = [];
+  CATALOG.forEach(function (g) { g.products.forEach(function (pr) { ALL_PRODUCTS.push({ p: pr, g: g }); }); });
+  function groupsByCat(catId) { return CATALOG.filter(function (g) { return g.cat === catId; }); }
+
+  function fundBadges(funding) {
+    if (!funding || !funding.length) return "";
+    return '<div class="fund-badges">' + funding.map(function (f) {
+      return '<span class="fund-badge fund-' + f.toLowerCase() + '" title="' + escapeHtml(FUND_INFO[f] || f) + '">' + escapeHtml(f) + "</span>";
+    }).join("") + "</div>";
+  }
+  function productCard(pr, g) {
+    var media = pr.img
+      ? '<div class="prod-media">' + picture(pr.img, pr.name, 600, 400) + "</div>"
+      : '<div class="prod-media illus cat-' + g.cat + '" aria-hidden="true">' + ico(pr.pic || g.icon) + "</div>";
+    return '<article class="prod-card">' + media +
+      '<div class="prod-body">' +
+        (pr.brand ? '<span class="prod-brand">' + escapeHtml(pr.brand) + "</span>" : "") +
+        "<h4>" + escapeHtml(pr.name) + "</h4>" +
+        '<p>' + escapeHtml(pr.blurb) + "</p>" +
+        fundBadges(pr.funding || g.funding) +
+        '<button class="btn btn-primary btn-sm" data-action="add" data-id="' + slugify(pr.name) +
+          '" data-name="' + escapeHtml(pr.name) + '" data-note="' + escapeHtml(g.name) + '">Add to quote</button>' +
+      "</div></article>";
+  }
+  function groupBlock(g) {
+    return '<section class="group" id="grp-' + g.id + '"><div class="group-head"><div>' +
+      "<h2>" + escapeHtml(g.name) + "</h2><p>" + escapeHtml(g.blurb) + "</p>" + fundBadges(g.funding) +
+      "</div></div><div class=\"prod-grid\">" + g.products.map(function (pr) { return productCard(pr, g); }).join("") + "</div></section>";
+  }
 
   var QUOTE_KEY = "hm_quote_v1";
   var LEADS_KEY = "hm_leads_v1";
@@ -371,33 +404,29 @@
     var body;
     if (q) {
       var ql = q.toLowerCase();
-      var matches = ALL_COLLECTIONS.filter(function (col) {
-        return (col.name + " " + col.catName).toLowerCase().indexOf(ql) !== -1;
+      var matches = ALL_PRODUCTS.filter(function (x) {
+        return (x.p.name + " " + (x.p.brand || "") + " " + x.p.blurb + " " + x.g.name).toLowerCase().indexOf(ql) !== -1;
       });
-      body = '<div class="section-head"><div><h2>Search results</h2>' +
+      body = '<div class="section-head"><div><h1>Search results</h1>' +
         '<p class="result-count">' + matches.length + " result" + (matches.length === 1 ? "" : "s") +
         ' for &ldquo;' + escapeHtml(q) + "&rdquo;</p></div></div>" +
         (matches.length
-          ? '<div class="col-grid">' + matches.map(function (m) { return collectionCard(m, m.cat, m.catName); }).join("") + "</div>"
-          : '<div class="empty-state"><div class="e" aria-hidden="true">🔎</div><h3>No matching products</h3>' +
+          ? '<div class="prod-grid">' + matches.map(function (x) { return productCard(x.p, x.g); }).join("") + "</div>"
+          : '<div class="empty-state"><h3>No matching products</h3>' +
             '<p class="muted">Try another search, or browse all categories.</p>' +
             '<a class="btn btn-primary" href="#/shop">Browse all products</a></div>');
     } else if (catId && catById(catId)) {
       var c = catById(catId);
       body =
-        '<div class="cat-hero cat-' + c.id + '">' +
-          picture(c.image, c.alt, 640, 420) +
-          "<div><h2>" + escapeHtml(c.name) + "</h2><p>" + escapeHtml(c.blurb) + "</p>" +
-          '<a class="btn btn-accent" href="#/quote">Request a quote</a></div>' +
+        '<div class="cat-hero cat-' + c.id + '">' + picture(c.image, c.alt, 640, 420) +
+          "<div><h1>" + escapeHtml(c.name) + "</h1><p>" + escapeHtml(c.blurb) + "</p>" +
+          '<a class="btn btn-accent" href="#/quote">Request a free quote</a></div>' +
         "</div>" +
-        '<div class="col-grid">' + c.collections.map(function (col) { return collectionCard(col, c.id, c.name); }).join("") + "</div>";
+        groupsByCat(catId).map(groupBlock).join("");
     } else {
-      body = CATEGORIES.map(function (c) {
-        return '<div class="cat-block"><div class="section-head"><div><h2 id="cat-' + c.id + '">' + escapeHtml(c.name) + "</h2>" +
-          "<p>" + escapeHtml(c.blurb) + "</p></div>" +
-          '<a class="btn btn-ghost btn-sm" href="#/shop?cat=' + c.id + '">View ' + escapeHtml(c.name) + "</a></div>" +
-          '<div class="col-grid">' + c.collections.map(function (col) { return collectionCard(col, c.id, c.name); }).join("") + "</div></div>";
-      }).join("");
+      body = '<div class="section-head"><div><h1>Explore our products</h1><p class="result-count">' +
+        ALL_PRODUCTS.length + " products across " + CATALOG.length + " categories — buy or rent, with funding help.</p></div></div>" +
+        CATALOG.map(groupBlock).join("");
     }
 
     return crumbs([{ label: "Home", href: "#/" }, { label: "Products" }]) +
