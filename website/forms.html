@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex" />
+<title>Form detection — Help Mobility</title>
+</head>
+<body>
+<!--
+  Hidden static copies of every form so Netlify's build-time form detection
+  registers them reliably. Visitors never see this page (noindex; not linked).
+  Field names here must match the real forms in the site.
+-->
+<form name="contact" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name" />
+  <input type="tel" name="phone" />
+  <input type="email" name="email" />
+  <select name="interest"></select>
+  <textarea name="message"></textarea>
+  <input name="bot-field" />
+</form>
+
+<form name="funding-check" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="first_name" />
+  <input type="text" name="last_name" />
+  <input type="tel" name="phone" />
+  <input type="email" name="email" />
+  <input type="text" name="city" />
+  <select name="equipment"></select>
+  <input type="checkbox" name="funding" />
+  <input type="text" name="insurer" />
+  <textarea name="message"></textarea>
+  <input type="checkbox" name="consent" />
+  <input name="bot-field" />
+</form>
+
+<form name="service" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="name" />
+  <input type="tel" name="phone" />
+  <input type="email" name="email" />
+  <select name="equipment"></select>
+  <textarea name="issue"></textarea>
+  <input type="checkbox" name="consent" />
+  <input name="bot-field" />
+</form>
+</body>
+</html>
